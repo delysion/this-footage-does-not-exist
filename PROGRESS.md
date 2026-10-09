@@ -2,7 +2,7 @@
 
 ## 2026-10-10 · Milestone 1 — workspace/tool audit
 - Workspace contained only an initialized, empty Git repository; no manuscript attachment was present.
-- Vercel MCP, agent-browser, Remotion skills, and Vercel CLI were not discoverable in this environment. Node/npm and Git are available; FFmpeg is not on PATH.
+- Vercel MCP, agent-browser, and the requested Vercel / Remotion skills are unavailable. Vercel CLI is not installed globally but can run through `npx`; Node/npm and Git are available, while system FFmpeg is not on PATH.
 - Prize manifesto, judging checks and submission form reviewed. Submission requires a verified participant email, rights/authorship declarations and explicit human authorship notes; no entry submitted.
 
 ## 2026-10-10 · Milestone 2 — first playable website

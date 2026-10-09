@@ -23,4 +23,4 @@ The doorway, two indistinct bodies, fallen shoe and precise 02:17:08–02:17:19 
 
 ## Authorship review
 
-Codex generated the initial source, copy, vector composition, sound code and editorial sequence from the artist's brief. The artist still needs to review and materially change or affirm the final imagery, edit timing, sound, language and competition description before entry. See [docs/ARTIST-DECISIONS.md](docs/ARTIST-DECISIONS.md) and [docs/AI-USAGE-NOTES.md](docs/AI-USAGE-NOTES.md). Do not use the notes as a claim that the artist has made choices not yet recorded.
+Codex generated the initial source, copy, vector composition, sound code and editorial sequence from the artist's brief. Before entry, the artist still needs to review and record specific choices about the final imagery, edit timing, sound, language and competition description. See [docs/ARTIST-DECISIONS.md](docs/ARTIST-DECISIONS.md) and [docs/AI-USAGE-NOTES.md](docs/AI-USAGE-NOTES.md). Do not use the notes as a claim that the artist has made choices not yet recorded.
