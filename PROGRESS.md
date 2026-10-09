@@ -23,4 +23,5 @@
 - Final MP4 rendered with Remotion after correcting the reveal; 60.011 seconds, H.264 1600×900 with an AAC score. Confirmed browser playback advanced and inspected sampled frames.
 - Final website rebuilt and rerun through Chrome QA at desktop/tablet/mobile. No errors, external requests or overflow. Reduced motion and all controls passed.
 - Competition description, draft AI Usage Notes, artist decision sheet, six-pillar adversarial review and evidence-based QA report are saved under `docs/`.
-- Remaining gates: local ZIP and commit; artist review; Vercel login for Preview; separate authorization for public Production deployment. No entry submitted.
+- Created `THIS_FOOTAGE_DOES_NOT_EXIST_package.zip` with project source, local assets, MP4, screenshots and documentation; committed source as a local Git repository.
+- Remaining gates: artist review; Vercel login for Preview; separate authorization for public Production deployment. No entry submitted.
