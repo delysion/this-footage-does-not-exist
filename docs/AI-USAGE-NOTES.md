@@ -1,0 +1,5 @@
+# Draft AI Usage Notes — artist review required
+
+The artist's brief set the title and tagline, eleven-second premise, four institutional interpretations and their interests, recurring visual anchors, scene grammars, interaction, and zero-frame ending. Codex translated that direction into the initial React/TypeScript and Remotion source, wrote the first SVG scene art and detailed captions, and authored a local synthetic tone bed. No generative image model, live AI service, stock image, film frame, external font request, or third-party soundtrack was used. The manuscript was not available as a file; the work followed only the constraints and conceptual directions stated in the artist's brief.
+
+The artist has not yet recorded a review of the completed implementation. Before submitting, the artist should review and select, revise or reject specific imagery, scene order, motion timing, sound and language in the decision sheet, then update these notes with those actual choices. Do not claim that a review or selection happened before it does.
