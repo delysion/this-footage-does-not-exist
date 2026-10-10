@@ -23,6 +23,6 @@ Updated 10 October 2026. This report covers local production output. No Vercel d
 ## Remaining external / human gates
 
 - Vercel CLI works through `npx`, but `npx vercel whoami` reported “Logged out.” No Vercel MCP, agent-browser, web-design-guidelines skill or Remotion agent skill is available. Preview and production deployment, deployment logs and unauthenticated public-URL access therefore remain unverified.
-- GitHub search connector is present but has no repository creation operation; `gh` CLI is unavailable and no `git remote` is configured. Source is committed locally; no GitHub URL is claimed.
+- Source and MP4 were pushed to the private [GitHub repository](https://github.com/delysion/this-footage-does-not-exist). The connected GitHub tool read `README.md` from its default branch, and `git ls-remote` confirmed the remote `main` commit matched the local commit. GitHub access requires an authorized account while the repository is private.
 - Competition submission was not attempted. The [judging gate](https://conveneo.eu/artprize/help/judging) requires personal rights and authorship declarations. The artist decision sheet and AI Usage Notes remain drafts for the artist's review; no authorship choices or artist name were invented.
 - The manuscript was not present in the workspace, so the artwork used only the conceptual constraints and directions supplied in the brief.

@@ -2,6 +2,8 @@
 
 An interactive cinematic artwork. Eleven seconds were never recorded. Four institutions made the gap mean four incompatible things.
 
+Source repository: [GitHub](https://github.com/delysion/this-footage-does-not-exist) (currently private).
+
 ## Run
 
 Requires Node.js 20+ and npm. No backend, account, tracking, or runtime AI service is used.
