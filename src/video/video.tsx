@@ -44,9 +44,9 @@ function Chapter({index}:{index:number}) {
 function Reveal() {
   const frame = useCurrentFrame();
   return <AbsoluteFill style={{background:'#030303',color:ivory,justifyContent:'center',alignItems:'center',textAlign:'center'}}>
-    {frame<40 && <div style={{font:`12px ${mono}`,letterSpacing:3,color:'#aa9e91'}}>REQUESTING SOURCE FRAMES ···</div>}
-    {frame>=100 && <div style={{font:`12px ${mono}`,letterSpacing:3,color:'#c6beb3',opacity:Math.min(1,(frame-100)/20)}}>ORIGINAL FRAMES RECOVERED: 0</div>}
-    {frame>=157 && <h2 style={{font:'300 96px/1.04 Arial',letterSpacing:-6,margin:'35px 0 0',opacity:Math.min(1,(frame-157)/33)}}>FOUR HISTORIES.<br/><i style={{fontFamily:'Georgia',fontWeight:400,color:'#e5cdb8'}}>ZERO FRAMES.</i></h2>}
+    {frame<=276 && <div style={{position:'absolute',bottom:'11%',left:0,right:0,font:`13px ${mono}`,letterSpacing:5,color:'#8d857d'}}>00:{String(Math.min(11,Math.floor(frame/24))).padStart(2,'0')}</div>}
+    {frame>=264 && <div style={{font:`12px ${mono}`,letterSpacing:3,color:'#c6beb3',opacity:Math.min(1,(frame-264)/18)}}>ORIGINAL FRAMES RECOVERED: 0</div>}
+    {frame>=312 && <h2 style={{font:'300 96px/1.04 Arial',letterSpacing:-6,margin:'35px 0 0',opacity:Math.min(1,(frame-312)/24)}}>FOUR HISTORIES.<br/><i style={{fontFamily:'Georgia',fontWeight:400,color:'#e5cdb8'}}>ZERO FRAMES.</i></h2>}
   </AbsoluteFill>;
 }
 
@@ -54,5 +54,5 @@ export const Film = () => <AbsoluteFill style={{background:'#030303'}}>
   <Sequence from={0} durationInFrames={1200}><Audio src={staticFile('tone-bed.wav')} volume={.72} /></Sequence>
   <Sequence from={0} durationInFrames={144}><Opening /></Sequence>
   {reconstructions.map((scene,index) => <Sequence key={scene.id} from={144+index*264} durationInFrames={264}><Chapter index={index} /></Sequence>)}
-  <Sequence from={1200} durationInFrames={240}><Reveal /></Sequence>
+  <Sequence from={1200} durationInFrames={384}><Reveal /></Sequence>
 </AbsoluteFill>;

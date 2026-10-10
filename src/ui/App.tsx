@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { eventTime, reconstructions, SceneArtwork, type Reconstruction } from './SceneArtwork';
 
 type Scene = 'archive' | Reconstruction | 'original';
-type RevealPhase = 'request' | 'empty' | 'zero' | 'verdict';
+type RevealPhase = 'silence' | 'zero' | 'verdict';
 const isCut = (scene: Scene): scene is Reconstruction => reconstructions.some(item => item.id === scene);
 const indexOf = (scene: Scene) => reconstructions.findIndex(item => item.id === scene);
 
@@ -34,8 +34,13 @@ function useScore(scene: Scene, enabled: boolean, paused: boolean) {
     if (!a) return;
     void a.context.resume();
     const now = a.context.currentTime;
+    if (scene === 'original') {
+      a.gain.gain.cancelScheduledValues(now);
+      a.gain.gain.setValueAtTime(0, now);
+      return;
+    }
     if (!enabled || paused || !isCut(scene)) {
-      a.gain.gain.setTargetAtTime(0, now, scene === 'original' ? .012 : .07);
+      a.gain.gain.setTargetAtTime(0, now, .07);
       return;
     }
     const score = {
@@ -63,7 +68,9 @@ export default function App() {
   const [paused, setPaused] = useState(false);
   const [sound, setSound] = useState(false);
   const [automatic, setAutomatic] = useState(false);
-  const [phase, setPhase] = useState<RevealPhase>('request');
+  const [phase, setPhase] = useState<RevealPhase>('silence');
+  const [silenceSeconds, setSilenceSeconds] = useState(0);
+  const silenceStartedAt = useRef(0);
   const reduced = useReducedMotion();
   useScore(scene, sound, paused);
 
@@ -76,7 +83,11 @@ export default function App() {
     select(next.id);
   }, [scene, select]);
   const start = () => { setSeconds(0); setScene('romance'); setPaused(false); setAutomatic(true); };
-  const reveal = () => { setScene('original'); setAutomatic(false); setPaused(false); setPhase(reduced ? 'verdict' : 'request'); };
+  const reveal = () => {
+    silenceStartedAt.current = performance.now();
+    setSilenceSeconds(0); setPhase('silence');
+    setScene('original'); setAutomatic(false); setPaused(false);
+  };
   const replay = () => { setScene('archive'); setSeconds(0); setPaused(false); setAutomatic(false); };
 
   useEffect(() => {
@@ -110,15 +121,19 @@ export default function App() {
 
   useEffect(() => {
     if (scene !== 'original') return;
-    if (reduced) { setPhase('verdict'); return; }
-    setPhase('request');
-    const timers = [
-      window.setTimeout(() => setPhase('empty'), 1450),
-      window.setTimeout(() => setPhase('zero'), 3750),
-      window.setTimeout(() => setPhase('verdict'), 6500),
-    ];
-    return () => timers.forEach(window.clearTimeout);
-  }, [scene, reduced]);
+    let frame = 0;
+    let verdictTimer = 0;
+    const tick = () => {
+      const elapsed = performance.now() - silenceStartedAt.current;
+      setSilenceSeconds(Math.min(11, Math.floor(elapsed / 1000)));
+      if (elapsed >= 11000) {
+        setPhase('zero');
+        verdictTimer = window.setTimeout(() => setPhase('verdict'), 2100);
+      } else frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => { cancelAnimationFrame(frame); window.clearTimeout(verdictTimer); };
+  }, [scene]);
 
   useEffect(() => {
     const key = (event: KeyboardEvent) => {
@@ -132,7 +147,7 @@ export default function App() {
   }, [scene, move]);
 
   const current = isCut(scene) ? reconstructions[indexOf(scene)] : null;
-  return <main className={`installation ${scene}`}>
+  return <main className={`installation ${scene} phase-${phase}`}>
     <header className="masthead">
       <span className="identity">ELEVEN SECONDS. ZERO FRAMES.</span>
       <span className="archive-id">ARCHIVE 011 / CAMERA 06</span>
@@ -158,7 +173,7 @@ export default function App() {
         <div className="progress-line" aria-label={`${Math.floor(seconds)} of 11 seconds`}><i style={{width:`${seconds / 11 * 100}%`}} /></div>
       </>}
       {scene === 'original' && <div className={`reveal reveal-${phase}`} aria-live="polite">
-        {phase === 'request' && <p className="request-line">REQUESTING SOURCE FRAMES <span aria-hidden="true">···</span></p>}
+        {(phase === 'silence' || phase === 'zero') && <p className="silence-timecode" role="timer" aria-live="off">00:{String(silenceSeconds).padStart(2, '0')}</p>}
         {(phase === 'zero' || phase === 'verdict') && <p className="zero-line">ORIGINAL FRAMES RECOVERED: <strong>0</strong></p>}
         {phase === 'verdict' && <h2>FOUR HISTORIES.<br/><em>ZERO FRAMES.</em></h2>}
       </div>}

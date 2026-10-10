@@ -1,8 +1,8 @@
 # ELEVEN SECONDS. ZERO FRAMES.
 
-*Four histories of an event no camera ever saw.* An interactive cinematic artwork and 60-second film for the Human After All Prize 2026.
+*Four histories of an event no camera ever saw.* An interactive cinematic artwork and 66-second film for the Human After All Prize 2026.
 
-The [source repository](https://github.com/delysion/this-footage-does-not-exist) is private. The existing [Vercel production domain](https://this-footage-does-not-exist.vercel.app/) is paused pending the artist's explicit publication approval. The latest attempted Preview was blocked by that project-wide pause; the revised site has been built and tested locally.
+The [source repository](https://github.com/delysion/this-footage-does-not-exist) is private. The artist authorized release at the existing [Vercel production domain](https://this-footage-does-not-exist.vercel.app/); deployment and production verification are tracked in [the QA report](docs/QA-REPORT.md).
 
 ## Run
 
@@ -17,9 +17,9 @@ Build with `npm run build`. The static output is `dist/`. All principal artwork 
 
 ## Experience
 
-The four cuts replay the same eleven seconds at 02:17:08–02:17:19. A red doorway, two figures, their reaching gesture and a damaged black shoe stay in the same spatial relationship. Changing chapters preserves the timecode. The images clear completely when the original is requested; the soundtrack stops, the retrieval fails and the screen remains empty before the final two lines.
+The four cuts replay the same eleven seconds at 02:17:08–02:17:19. A red doorway, two figures, their reaching gesture and a damaged black shoe stay in the same spatial relationship. Changing chapters preserves the timecode. Requesting the original abruptly clears image and sound. A minimal clock measures eleven real seconds in blackness; the zero-frame count and final two lines appear afterward.
 
-Arrow keys change reconstructions, Space pauses or plays when the page has focus, and Escape returns to the opening. Visible controls provide the same actions. A reduced-motion setting stops the moving interval and shows the final finding immediately.
+Arrow keys change reconstructions, Space pauses or plays when the page has focus, and Escape returns to the opening. Visible controls provide the same actions. A reduced-motion setting stops the moving reconstruction but retains the artist's eleven-second final interval.
 
 ## Review and evidence
 
@@ -29,4 +29,4 @@ Arrow keys change reconstructions, Space pauses or plays when the page has focus
 - [Competition description](docs/COMPETITION-DESCRIPTION.md)
 - [QA report](docs/QA-REPORT.md) and [browser screenshots](screenshots/)
 
-Codex implemented the code, vector scenes, sound and film under the artist's detailed creative directions. The artist has **not yet recorded final visual/audio review or approved public publication**. Those steps must not be represented as complete in a competition entry.
+Codex implemented the code, vector scenes, sound and film under the artist's detailed creative directions. The artist authorized public website release and made the eleven seconds of silence a specific final direction. The artist has **not yet reviewed and approved the updated MP4, images or audio mix**. That review and competition submission approval must not be represented as complete.
