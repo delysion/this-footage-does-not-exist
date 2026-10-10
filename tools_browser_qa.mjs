@@ -40,7 +40,20 @@ await desktop.keyboard.press('ArrowLeft');
 report.desktop.keyboardLeft = await desktop.locator('.installation').getAttribute('class').then(value => value.includes('revolution'));
 await desktop.keyboard.press('ArrowRight');
 report.desktop.keyboardRight = await desktop.locator('.installation').getAttribute('class').then(value => value.includes('commerce'));
-const desktopSilenceStart = Date.now();
+const preciseSilenceDuration = desktop.evaluate(() => new Promise(resolve => {
+  const root = document.querySelector('.installation');
+  const trigger = document.querySelector('.end-action button');
+  trigger.addEventListener('click', () => {
+    const startedAt = performance.now();
+    const observer = new MutationObserver(() => {
+      if (root.classList.contains('phase-zero')) {
+        observer.disconnect();
+        resolve(Math.round(performance.now() - startedAt));
+      }
+    });
+    observer.observe(root, { attributes: true, attributeFilter: ['class'] });
+  }, { once: true });
+}));
 await desktop.getByRole('button', { name: /SHOW ORIGINAL FOOTAGE/ }).click();
 report.desktop.sourceBlank = await desktop.locator('.scene-art').count() === 0;
 report.desktop.clockStartsAtZero = await desktop.locator('.silence-timecode').innerText() === '00:00';
@@ -48,8 +61,8 @@ await desktop.waitForTimeout(5000);
 await desktop.screenshot({ path: 'screenshots/silence-desktop.png' });
 report.desktop.onlyClockDuringSilence = await desktop.locator('.zero-line').count() === 0 && await desktop.locator('.reveal').innerText() === await desktop.locator('.silence-timecode').innerText();
 await desktop.locator('.zero-line').waitFor({ state: 'visible', timeout: 9000 });
-report.desktop.silenceDurationMs = Date.now() - desktopSilenceStart;
-report.desktop.silenceDurationPass = report.desktop.silenceDurationMs >= 10900 && report.desktop.silenceDurationMs <= 11600;
+report.desktop.silenceDurationMs = await preciseSilenceDuration;
+report.desktop.silenceDurationPass = report.desktop.silenceDurationMs >= 11000 && report.desktop.silenceDurationMs <= 11100;
 await desktop.getByRole('heading', { name: /FOUR HISTORIES/ }).waitFor({ state: 'visible', timeout: 5000 });
 await desktop.waitForTimeout(2200);
 await desktop.screenshot({ path: 'screenshots/reveal-desktop.png' });
