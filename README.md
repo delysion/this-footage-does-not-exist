@@ -2,7 +2,7 @@
 
 *Four histories of an event no camera ever saw.* An interactive cinematic artwork and 73-second film for the Human After All Prize 2026.
 
-The [source repository](https://github.com/delysion/this-footage-does-not-exist) is private. The artist authorized release at the existing [Vercel production domain](https://this-footage-does-not-exist.vercel.app/); deployment and production verification are tracked in [the QA report](docs/QA-REPORT.md).
+The [source repository](https://github.com/delysion/this-footage-does-not-exist) is private. The public artwork is at [eleven-seconds-zero-frames.vercel.app](https://eleven-seconds-zero-frames.vercel.app/); deployment and production verification are tracked in [the QA report](docs/QA-REPORT.md).
 
 ## Run
 
