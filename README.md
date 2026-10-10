@@ -13,7 +13,7 @@ npm install
 npm run dev
 ```
 
-Build with `npm run build`. The static output is `dist/`. The seven original, AI-assisted master-scene images are in `assets/source/`; locally optimized web assets are in `public/art/`. `tools_optimize_images.py` regenerates them. The scene edit and camera movement are in `src/ui/SceneArtwork.tsx`, `src/ui/style.css` and `src/video/video.tsx`. Website sound is synthesized locally and opt-in. The film uses Remotion; run `python tools_generate_sound.py` and `npm run render` to regenerate [the MP4](artifacts/eleven-seconds-zero-frames.mp4).
+Build with `npm run build`. The static output is `dist/`. The seven original, AI-assisted master-scene images are in `assets/source/`; locally optimized web assets are in `public/art/`. `tools_optimize_images.py` regenerates them and requires Pillow; the supplied WebPs work without Python. The scene edit and camera movement are in `src/ui/SceneArtwork.tsx`, `src/ui/style.css` and `src/video/video.tsx`. Website sound is synthesized locally and opt-in. The film uses Remotion; run `python tools_generate_sound.py` and `npm run render` to regenerate [the MP4](artifacts/eleven-seconds-zero-frames.mp4). Contact-sheet and poster scripts use Playwright with an installed Chrome browser.
 
 ## Experience
 
