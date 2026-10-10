@@ -1,6 +1,7 @@
 import { AbsoluteFill, Audio, Img, Sequence, interpolate, staticFile, useCurrentFrame } from 'remotion';
 import { eventTime, reconstructions, type ArtworkCut } from '../ui/SceneArtwork';
 import { GestureShot } from '../ui/GestureShot';
+import { AftermathAction } from '../ui/AftermathAction';
 
 const paper = '#f2e8db';
 const mono = 'Courier New, monospace';
@@ -80,10 +81,18 @@ function Aftermath() {
   </AbsoluteFill>;
 }
 
-export const Film = () => <AbsoluteFill style={{background:'#000'}}>
+function AftermathB() {
+  const frame = useCurrentFrame();
+  return <AbsoluteFill><AftermathAction seconds={frame/24} roomSrc={room('final')} handSrc={staticFile('art/gesture-hands.webp')} /></AbsoluteFill>;
+}
+
+const CommonFilm = ({ending}: {ending:'A' | 'B'}) => <AbsoluteFill style={{background:'#000'}}>
   <Sequence from={0} durationInFrames={1200}><Audio src={staticFile('tone-bed.wav')} volume={.9} /></Sequence>
   <Sequence from={0} durationInFrames={144}><Opening /></Sequence>
   {reconstructions.map((scene,index) => <Sequence key={scene.id} from={144+index*264} durationInFrames={264}><Chapter index={index} /></Sequence>)}
   <Sequence from={1200} durationInFrames={264}><Silence /></Sequence>
-  <Sequence from={1464} durationInFrames={288}><Aftermath /></Sequence>
+  <Sequence from={1464} durationInFrames={ending === 'A' ? 288 : 240}>{ending === 'A' ? <Aftermath /> : <AftermathB />}</Sequence>
 </AbsoluteFill>;
+
+export const FilmA = () => <CommonFilm ending="A" />;
+export const Film = () => <CommonFilm ending="B" />;

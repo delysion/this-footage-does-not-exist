@@ -14,6 +14,7 @@ This sheet records instructions the artist actually supplied and decisions that 
 - In the latest redesign direction, the artist replaced the central proposition with **an unrecorded event whose invented institutional meanings produce real consequences**. They required one architectural master scene and one persistent, identically damaged shoe. Memorial elements, forensic packaging, political banners and luxury display must accumulate physically in the same room.
 - The artist retained the eleven real seconds of black and silence, then directed the altered room to return. The original event remains unproven, but its representations have changed the room. The artist supplied the provisional closing statement **NOTHING WAS RECORDED. EVERYTHING WAS DECIDED.**
 - In the latest critical review, the artist rejected the reliance on one mostly unchanged camera view and static-image pans. They specifically asked for the same reaching human gesture to become tenderness, threat, political foundation and product through four distinct edits, with the interpreted person's resulting constraint made more tangible. They also required Reduced Motion to keep automatic narrative progression.
+- In the final intervention, the artist directed a second ending: after the unchanged eleven-second silent blank, the altered room returns; a hand reaches the damaged shoe inside the display, touches the glass, pauses and withdraws. They requested no final explanatory slogan, narration or dramatic reaction. The existing ending must remain a separate export, with three film frames per ending. The artist explicitly reserved selection and competition approval.
 - The artist authorized reactivating the Vercel project and publishing the revised website at its existing production domain. This authorization does not approve the updated MP4, stills, audio mix or competition submission.
 - The artist required an honest account of AI assistance and a substantive opportunity to revise the final piece before entry.
 
@@ -24,8 +25,8 @@ These are human-authored directions in the conversation. The artist has not yet 
 1. Opening: event 011 and the eleven-second gap are legible immediately.
 2. Four eleven-second cuts revisit the same room, red door, two figures, gesture and damaged shoe. The images form a cumulative sequence: memorial, evidence, monument, commodity. Direct chapter changes preserve the timecode.
 3. A single generated pair of hands now performs a code-animated reach and hesitation across all four cuts. Romance holds it as a memorial image; Security abruptly crops and marks a subject held; Revolution freezes and multiplies it; Commerce loops the reach inside a vitrine. The same source image is used throughout. A repeated shoe close-up and different institutional sound tones remain. The room bears the previous institutions' traces.
-4. Original request: immediate image and music cut; eleven real seconds of black with a `00:00`–`00:11` clock; zero recovered frames; the altered room returns without the figures; the provisional two-line verdict appears. Replay remains available.
-5. Sound is opt-in on the website. The 73-second standalone film has a locally synthesized score before the request, then intentional silence through the blackout and aftermath.
+4. Original request: immediate image and music cut; eleven real seconds of black with a `00:00`–`00:11` clock. **Ending A** retains the zero-frame line and provisional written verdict. **Ending B** and the review website show the later hand meeting the glass, holding and withdrawing, with no post-blank text. Replay remains available.
+5. Sound is opt-in on the website. Both standalone films use a locally synthesized score before the request, then intentional silence through the blackout and aftermath.
 
 ## Edits actually considered
 
@@ -35,6 +36,7 @@ These are human-authored directions in the conversation. The artist has not yet 
 - **Rejected after the competition-gallery audit:** four independent flat illustrations and a finale ending in a black graphic field. **Artist's direction:** a single architectural set, the identical shoe, accumulated physical residues and a final return to the changed room.
 - **Revised:** a final shoe close-up that concealed the accumulated evidence during the verdict. **Current implementation:** the shoe detail gives way to the whole transformed room before the final words.
 - **Revised after the artist's latest critique:** most of each cut previously used camera pans and zooms on generated room stills. **Current implementation:** the central shot uses two independently moved arms and institution-specific cutting, holding, multiplying or looping. Finger joints are not separately animated; this remains a composite, not photographed human performance.
+- **Two endings retained for artist comparison:** A closes with the room, shoe and words; B closes with a hand stopped by glass and no final words. No artist choice between them is recorded yet. The final hand image reuses the previously generated arm asset; it is not a new artist-filmed performance.
 
 ## Final artist review — still open
 
@@ -42,7 +44,7 @@ These are human-authored directions in the conversation. The artist has not yet 
 - Accept or revise the generated master room, the specific black shoe and each of the four accumulated transformations:
 - After viewing the new hand passage, accept or reject its physical credibility, the four edits and whether the portrayed human cost is concrete enough:
 - Keep or change the scene order and eleven-second duration:
-- After viewing the updated eleven-second finale and return to the room, keep or revise its placement, typography and provisional final wording:
+- After viewing both exported endings and their three key frames, select A, select B, or require a further edit. If selecting B, confirm whether the fingertip's contact with glass and withdrawal convey the intended human cost without text:
 - After listening, keep / revise / remove the web score and film score:
 - Select or replace the preview image:
 - Approve or revise the competition description and AI Usage Notes:

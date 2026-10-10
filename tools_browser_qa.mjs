@@ -61,13 +61,14 @@ report.desktop.clockStartsAtZero = await desktop.locator('.silence-timecode').in
 await desktop.waitForTimeout(5000);
 await desktop.screenshot({ path: `${shots}/silence-desktop.png` });
 report.desktop.onlyClockDuringSilence = await desktop.locator('.zero-line').count() === 0 && await desktop.locator('.reveal').innerText() === await desktop.locator('.silence-timecode').innerText();
-await desktop.locator('.zero-line').waitFor({ state: 'visible', timeout: 9000 });
+await desktop.locator('.aftermath-action').waitFor({ state: 'visible', timeout: 9000 });
 report.desktop.silenceDurationMs = await preciseSilenceDuration;
 report.desktop.silenceDurationPass = report.desktop.silenceDurationMs >= 11000 && report.desktop.silenceDurationMs <= 11100;
-await desktop.getByRole('heading', { name: /NOTHING WAS RECORDED/ }).waitFor({ state: 'visible', timeout: 12000 });
-await desktop.waitForTimeout(2200);
+report.desktop.physicalAction = await desktop.locator('.aftermath-hand').count() === 1;
+report.desktop.noFinalSlogan = await desktop.getByText('NOTHING WAS RECORDED.').count() === 0;
+await desktop.getByRole('button', { name: /REPLAY/ }).waitFor({ state: 'visible', timeout: 13000 });
 await desktop.screenshot({ path: `${shots}/reveal-desktop.png` });
-report.desktop.reveal = await desktop.locator('.reveal').innerText();
+report.desktop.reveal = await desktop.locator('.aftermath-action').getAttribute('aria-label');
 await desktop.getByRole('button', { name: /REPLAY/ }).click();
 report.desktop.replay = await desktop.getByRole('heading', { name: /ELEVEN SECONDS/ }).isVisible();
 await desktop.getByRole('button', { name: /ENTER THE GAP/ }).click();
@@ -99,8 +100,7 @@ for (const [index, name] of chapterNames.entries()) {
 }
 await mobile.getByRole('button', { name: /SHOW ORIGINAL FOOTAGE/ }).click();
 await mobile.screenshot({ path: `${shots}/silence-mobile.png` });
-await mobile.getByRole('heading', { name: /NOTHING WAS RECORDED/ }).waitFor({ state: 'visible', timeout: 22000 });
-await mobile.waitForTimeout(2200);
+await mobile.getByRole('button', { name: /REPLAY/ }).waitFor({ state: 'visible', timeout: 24000 });
 await mobile.screenshot({ path: `${shots}/reveal-mobile.png` });
 report.mobile.overflow = await mobile.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
 await mobile.close();
@@ -118,10 +118,10 @@ await reduced.locator('.installation.security').waitFor({state:'visible',timeout
 report.reducedMotion.automaticProgression = true;
 await reduced.getByRole('button', { name: /SHOW ORIGINAL FOOTAGE/ }).click();
 report.reducedMotion.clockVisible = await reduced.locator('.silence-timecode').isVisible();
-await reduced.locator('.zero-line').waitFor({ state: 'visible', timeout: 14000 });
-report.reducedMotion.elevenSecondSilenceRetained = await reduced.locator('.zero-line').isVisible();
+await reduced.locator('.aftermath-action').waitFor({ state: 'visible', timeout: 14000 });
+report.reducedMotion.elevenSecondSilenceRetained = await reduced.locator('.aftermath-action').isVisible();
 await reduced.close();
 
 await browser.close();
 console.log(JSON.stringify(report, null, 2));
-if (failures.length || report.desktop.overflow || report.mobile.overflow || !report.desktop.silenceDurationPass || !report.reducedMotion.timeAdvances || !report.reducedMotion.staticCamera || !report.reducedMotion.automaticProgression) process.exitCode = 1;
+if (failures.length || report.desktop.overflow || report.mobile.overflow || !report.desktop.silenceDurationPass || !report.desktop.physicalAction || !report.desktop.noFinalSlogan || !report.reducedMotion.timeAdvances || !report.reducedMotion.staticCamera || !report.reducedMotion.automaticProgression) process.exitCode = 1;

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { artworkFiles, eventTime, gestureFile, reconstructions, SceneArtwork, shoeFile, type Reconstruction } from './SceneArtwork';
+import { AftermathAction } from './AftermathAction';
 
 type Scene = 'archive' | Reconstruction | 'original';
 type RevealPhase = 'silence' | 'aftermath' | 'verdict';
@@ -145,9 +146,9 @@ export default function App() {
       } else {
         setSilenceSeconds(11);
         setAftermathSeconds(Math.min(10, (elapsed - 11000) / 1000));
-        setPhase(elapsed >= 19000 ? 'verdict' : 'aftermath');
+        setPhase(elapsed >= 21000 ? 'verdict' : 'aftermath');
       }
-      if (elapsed < 21000) frame = requestAnimationFrame(tick);
+      if (elapsed < 22000) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
@@ -173,7 +174,7 @@ export default function App() {
     </header>
     <section className="stage" aria-label={scene === 'original' ? 'Original footage request' : 'Missing archive interval'}>
       {scene !== 'original' && <SceneArtwork cut={current?.id ?? 'master'} seconds={current ? seconds : 0} reducedMotion={reduced} />}
-      {scene === 'original' && phase !== 'silence' && <SceneArtwork cut="final" seconds={aftermathSeconds} reducedMotion={reduced} />}
+      {scene === 'original' && phase !== 'silence' && <AftermathAction seconds={aftermathSeconds} reducedMotion={reduced} roomSrc={artworkFiles.final} handSrc={gestureFile} />}
       <div className="stage-vignette" aria-hidden="true" />
       {scene === 'archive' && <div className="opening">
         <p className="overline">EVENT 011 — 11 SECONDS MISSING</p>
@@ -188,10 +189,8 @@ export default function App() {
         <div className="scene-caption" style={{opacity: seconds >= 1.8 && seconds < 7.45 ? 0 : 1}}><span>{current.name} / RECONSTRUCTION 0{indexOf(scene) + 1}</span><h2>{current.claim}</h2><p>{current.imprint}</p></div>
         <div className="progress-line" aria-label={`${Math.floor(seconds)} of 11 seconds`}><i style={{width:`${seconds / 11 * 100}%`}} /></div>
       </>}
-      {scene === 'original' && <div className={`reveal reveal-${phase}`} aria-live="polite">
-        {phase === 'silence' && <p className="silence-timecode" role="timer" aria-live="off">00:{String(silenceSeconds).padStart(2, '0')}</p>}
-        {phase !== 'silence' && <p className="zero-line">ORIGINAL FRAMES RECOVERED: <strong>0</strong></p>}
-        {phase === 'verdict' && <h2>NOTHING WAS RECORDED.<br/><em>EVERYTHING WAS DECIDED.</em></h2>}
+      {scene === 'original' && phase === 'silence' && <div className="reveal reveal-silence">
+        <p className="silence-timecode" role="timer" aria-live="off">00:{String(silenceSeconds).padStart(2, '0')}</p>
       </div>}
     </section>
     <footer className="controls">
