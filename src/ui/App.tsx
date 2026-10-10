@@ -60,6 +60,13 @@ function useScore(scene: Scene, enabled: boolean, paused: boolean) {
     }
   }, [scene, enabled, paused]);
   useEffect(() => () => { if (audio.current) void audio.current.context.close(); }, []);
+  return useCallback(() => {
+    const a = audio.current;
+    if (!a) return;
+    const now = a.context.currentTime;
+    a.gain.gain.cancelScheduledValues(now);
+    a.gain.gain.setValueAtTime(0, now);
+  }, []);
 }
 
 export default function App() {
@@ -72,7 +79,7 @@ export default function App() {
   const [silenceSeconds, setSilenceSeconds] = useState(0);
   const silenceStartedAt = useRef(0);
   const reduced = useReducedMotion();
-  useScore(scene, sound, paused);
+  const cutSound = useScore(scene, sound, paused);
 
   const select = useCallback((next: Reconstruction, preserveTime = true) => {
     setSeconds(current => preserveTime && isCut(scene) && current < 11 ? current : 0);
@@ -84,6 +91,7 @@ export default function App() {
   }, [scene, select]);
   const start = () => { setSeconds(0); setScene('romance'); setPaused(false); setAutomatic(true); };
   const reveal = () => {
+    cutSound();
     silenceStartedAt.current = performance.now();
     setSilenceSeconds(0); setPhase('silence');
     setScene('original'); setAutomatic(false); setPaused(false);
