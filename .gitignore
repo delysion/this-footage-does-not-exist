@@ -6,3 +6,6 @@ out/
 *.tsbuildinfo
 THIS_FOOTAGE_DOES_NOT_EXIST_package.zip
 ELEVEN_SECONDS_ZERO_FRAMES_package.zip
+
+.vercel
+.env*

@@ -8,9 +8,11 @@ This sheet records instructions the artist actually supplied and decisions that 
 - The artist directed the work to preserve the existing project, make the four versions feel like incompatible realities of one missing interval, and keep the Vercel domain if practical.
 - The artist specified the red doorway, two ambiguous silhouettes, damaged black shoe, exact timestamp and recognizable geometry as recurring anchors. They asked for a shared gesture interpreted differently by each institution.
 - The artist specified four distinct scene grammars: intimate crimson Romance, cold forensic Security, monumental amber Revolution, and luxurious Commerce. The artist required that any confidence indicator be identified as fictional.
-- The artist directed the final request to clear the images and sound, show **ORIGINAL FRAMES RECOVERED: 0**, hold visual absence, then end with **FOUR HISTORIES. ZERO FRAMES.**
+- An earlier direction ended on **FOUR HISTORIES. ZERO FRAMES.** The artist subsequently revised the ending; that line is no longer the proposed final cut.
 - In a further explicit revision, the artist made the final silence the central artistic decision: the reconstruction and soundtrack cut off abruptly; an almost black screen shows only a minimal clock from `00:00` to `00:11` for eleven real seconds; the zero-frame count and final two lines follow in sequence. The artist excluded narration, glitches, philosophical explanation and dramatic final music.
 - The artist expressly reaffirmed the shared red doorway, ambiguous figures and damaged shoe across all four cinematic interpretations.
+- In the latest redesign direction, the artist replaced the central proposition with **an unrecorded event whose invented institutional meanings produce real consequences**. They required one architectural master scene and one persistent, identically damaged shoe. Memorial elements, forensic packaging, political banners and luxury display must accumulate physically in the same room.
+- The artist retained the eleven real seconds of black and silence, then directed the altered room to return. The original event remains unproven, but its representations have changed the room. The artist supplied the provisional closing statement **NOTHING WAS RECORDED. EVERYTHING WAS DECIDED.**
 - The artist authorized reactivating the Vercel project and publishing the revised website at its existing production domain. This authorization does not approve the updated MP4, stills, audio mix or competition submission.
 - The artist required an honest account of AI assistance and a substantive opportunity to revise the final piece before entry.
 
@@ -19,23 +21,25 @@ These are human-authored directions in the conversation. The artist has not yet 
 ## Proposed version to review
 
 1. Opening: event 011 and the eleven-second gap are legible immediately.
-2. Four eleven-second cuts revisit the same red door, two figures, reaching gesture and damaged black shoe. Direct chapter changes preserve the timecode, producing a match cut.
-3. Romance calls the gesture intimacy; Security calls it imminent contact; Revolution presents it as an origin; Commerce turns it into a collectible memory.
-4. Original request: immediate image and music cut; eleven real seconds of almost complete black with a `00:00`–`00:11` clock; zero recovered frames; then the two-line ending. Replay remains available.
-5. Sound is opt-in on the website. The standalone film has a locally synthesized score in the four cuts and exactly timed silence in the final scene.
+2. Four eleven-second cuts revisit the same room, red door, two figures, gesture and damaged shoe. The images form a cumulative sequence: memorial, evidence, monument, commodity. Direct chapter changes preserve the timecode.
+3. Each cut uses a slow camera move, a repeated shoe close-up and a different institutional sound tone. The room bears the previous institutions' traces.
+4. Original request: immediate image and music cut; eleven real seconds of black with a `00:00`–`00:11` clock; zero recovered frames; the altered room returns without the figures; the provisional two-line verdict appears. Replay remains available.
+5. Sound is opt-in on the website. The 73-second standalone film has a locally synthesized score before the request, then intentional silence through the blackout and aftermath.
 
 ## Edits actually considered
 
 - **Rejected:** the previous immediate finale with several explanatory lines, followed by an AI-proposed shorter wait of approximately 6.5 seconds. **Artist's chosen revision:** eleven measured silent seconds with only a clock, then two successive statements.
 - **Rejected:** the pale, pristine shoe and Revolution crowd drawn over the shared figures. **Proposed:** one damaged black shoe and a collective image around, rather than over, the two main figures.
 - **Rejected:** unrelated scene-specific motion loops. **Proposed:** one physical eleven-second action with four cinematic treatments and time-preserving cuts.
+- **Rejected after the competition-gallery audit:** four independent flat illustrations and a finale ending in a black graphic field. **Artist's direction:** a single architectural set, the identical shoe, accumulated physical residues and a final return to the changed room.
+- **Revised:** a final shoe close-up that concealed the accumulated evidence during the verdict. **Current implementation:** the shoe detail gives way to the whole transformed room before the final words.
 
 ## Final artist review — still open
 
 - Public artist credit and whether the named artist has the right to submit this work:
-- Which of the four visual cuts should be revised, and what precise change should be made:
+- Accept or revise the generated master room, the specific black shoe and each of the four accumulated transformations:
 - Keep or change the scene order and eleven-second duration:
-- After viewing the updated eleven-second finale, keep or revise its placement, typography and final wording:
+- After viewing the updated eleven-second finale and return to the room, keep or revise its placement, typography and provisional final wording:
 - After listening, keep / revise / remove the web score and film score:
 - Select or replace the preview image:
 - Approve or revise the competition description and AI Usage Notes:

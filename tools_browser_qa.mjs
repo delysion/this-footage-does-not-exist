@@ -2,7 +2,8 @@ import { chromium } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 
 const url = process.argv[2] ?? 'http://localhost:4174/';
-await mkdir('screenshots', { recursive: true });
+const shots = process.argv[3] ?? 'screenshots';
+await mkdir(shots, { recursive: true });
 const browser = await chromium.launch({ headless: true, channel: 'chrome' });
 const failures = [];
 const report = { url, desktop: {}, tablet: {}, mobile: {}, reducedMotion: {}, failures };
@@ -16,7 +17,7 @@ const desktop = await browser.newPage({ viewport: { width: 1440, height: 900 }, 
 captureErrors(desktop);
 await desktop.goto(url, { waitUntil: 'networkidle' });
 report.desktop.title = await desktop.title();
-await desktop.screenshot({ path: 'screenshots/opening-desktop.png' });
+await desktop.screenshot({ path: `${shots}/opening-desktop.png` });
 await desktop.getByRole('button', { name: /ENTER THE GAP/ }).click();
 for (const [index, name] of chapterNames.entries()) {
   if (index) await desktop.getByRole('button', { name: new RegExp(name) }).click();
@@ -24,7 +25,7 @@ for (const [index, name] of chapterNames.entries()) {
   const time = await desktop.locator('.timecode strong').innerText();
   const artwork = await desktop.locator('.scene-art').getAttribute('aria-label');
   report.desktop[name.toLowerCase()] = { time, artwork, visible: await desktop.getByText(`RECONSTRUCTION 0${index+1}`).count() > 0 };
-  await desktop.screenshot({ path: `screenshots/${name.toLowerCase()}-desktop.png` });
+  await desktop.screenshot({ path: `${shots}/${name.toLowerCase()}-desktop.png` });
 }
 await desktop.getByRole('button', { name: 'Pause sequence' }).click();
 const pausedAt = await desktop.locator('.timecode strong').innerText();
@@ -46,7 +47,7 @@ const preciseSilenceDuration = desktop.evaluate(() => new Promise(resolve => {
   trigger.addEventListener('click', () => {
     const startedAt = performance.now();
     const observer = new MutationObserver(() => {
-      if (root.classList.contains('phase-zero')) {
+      if (root.classList.contains('phase-aftermath')) {
         observer.disconnect();
         resolve(Math.round(performance.now() - startedAt));
       }
@@ -58,14 +59,14 @@ await desktop.getByRole('button', { name: /SHOW ORIGINAL FOOTAGE/ }).click();
 report.desktop.sourceBlank = await desktop.locator('.scene-art').count() === 0;
 report.desktop.clockStartsAtZero = await desktop.locator('.silence-timecode').innerText() === '00:00';
 await desktop.waitForTimeout(5000);
-await desktop.screenshot({ path: 'screenshots/silence-desktop.png' });
+await desktop.screenshot({ path: `${shots}/silence-desktop.png` });
 report.desktop.onlyClockDuringSilence = await desktop.locator('.zero-line').count() === 0 && await desktop.locator('.reveal').innerText() === await desktop.locator('.silence-timecode').innerText();
 await desktop.locator('.zero-line').waitFor({ state: 'visible', timeout: 9000 });
 report.desktop.silenceDurationMs = await preciseSilenceDuration;
 report.desktop.silenceDurationPass = report.desktop.silenceDurationMs >= 11000 && report.desktop.silenceDurationMs <= 11100;
-await desktop.getByRole('heading', { name: /FOUR HISTORIES/ }).waitFor({ state: 'visible', timeout: 5000 });
+await desktop.getByRole('heading', { name: /NOTHING WAS RECORDED/ }).waitFor({ state: 'visible', timeout: 12000 });
 await desktop.waitForTimeout(2200);
-await desktop.screenshot({ path: 'screenshots/reveal-desktop.png' });
+await desktop.screenshot({ path: `${shots}/reveal-desktop.png` });
 report.desktop.reveal = await desktop.locator('.reveal').innerText();
 await desktop.getByRole('button', { name: /REPLAY/ }).click();
 report.desktop.replay = await desktop.getByRole('heading', { name: /ELEVEN SECONDS/ }).isVisible();
@@ -83,24 +84,24 @@ await tablet.goto(url, { waitUntil: 'networkidle' });
 await tablet.getByRole('button', { name: /ENTER THE GAP/ }).click();
 report.tablet.chapterVisible = await tablet.getByRole('button', { name: /SHOW ORIGINAL FOOTAGE/ }).isVisible();
 report.tablet.overflow = await tablet.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
-await tablet.screenshot({ path: 'screenshots/romance-tablet.png' });
+await tablet.screenshot({ path: `${shots}/romance-tablet.png` });
 await tablet.close();
 
 const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
 captureErrors(mobile);
 await mobile.goto(url, { waitUntil: 'networkidle' });
-await mobile.screenshot({ path: 'screenshots/opening-mobile.png' });
+await mobile.screenshot({ path: `${shots}/opening-mobile.png` });
 await mobile.getByRole('button', { name: /ENTER THE GAP/ }).click();
 for (const [index, name] of chapterNames.entries()) {
   if (index) await mobile.getByRole('button', { name: new RegExp(name) }).click();
   report.mobile[name.toLowerCase()] = await mobile.locator('.scene-art').isVisible();
-  await mobile.screenshot({ path: `screenshots/${name.toLowerCase()}-mobile.png` });
+  await mobile.screenshot({ path: `${shots}/${name.toLowerCase()}-mobile.png` });
 }
 await mobile.getByRole('button', { name: /SHOW ORIGINAL FOOTAGE/ }).click();
-await mobile.screenshot({ path: 'screenshots/silence-mobile.png' });
-await mobile.getByRole('heading', { name: /FOUR HISTORIES/ }).waitFor({ state: 'visible', timeout: 16000 });
+await mobile.screenshot({ path: `${shots}/silence-mobile.png` });
+await mobile.getByRole('heading', { name: /NOTHING WAS RECORDED/ }).waitFor({ state: 'visible', timeout: 22000 });
 await mobile.waitForTimeout(2200);
-await mobile.screenshot({ path: 'screenshots/reveal-mobile.png' });
+await mobile.screenshot({ path: `${shots}/reveal-mobile.png` });
 report.mobile.overflow = await mobile.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
 await mobile.close();
 
@@ -117,10 +118,6 @@ await reduced.locator('.zero-line').waitFor({ state: 'visible', timeout: 14000 }
 report.reducedMotion.elevenSecondSilenceRetained = await reduced.locator('.zero-line').isVisible();
 await reduced.close();
 
-const poster = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
-await poster.goto(url, { waitUntil: 'networkidle' });
-await poster.screenshot({ path: 'public/preview.png' });
-await poster.close();
 await browser.close();
 console.log(JSON.stringify(report, null, 2));
 if (failures.length || report.desktop.overflow || report.mobile.overflow || !report.desktop.silenceDurationPass) process.exitCode = 1;

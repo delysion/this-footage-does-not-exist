@@ -1,7 +1,9 @@
 artifacts/
+assets/source/
 screenshots/
 docs/
 ART_AUDIT.md
+COMPETITIVE_AUDIT.md
 ARTIST_DECISIONS.md
 PROGRESS.md
 tools_browser_qa.mjs

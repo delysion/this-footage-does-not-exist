@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { eventTime, reconstructions, SceneArtwork, type Reconstruction } from './SceneArtwork';
+import { artworkFiles, eventTime, reconstructions, SceneArtwork, shoeFile, type Reconstruction } from './SceneArtwork';
 
 type Scene = 'archive' | Reconstruction | 'original';
-type RevealPhase = 'silence' | 'zero' | 'verdict';
+type RevealPhase = 'silence' | 'aftermath' | 'verdict';
 const isCut = (scene: Scene): scene is Reconstruction => reconstructions.some(item => item.id === scene);
 const indexOf = (scene: Scene) => reconstructions.findIndex(item => item.id === scene);
 
@@ -77,9 +77,17 @@ export default function App() {
   const [automatic, setAutomatic] = useState(false);
   const [phase, setPhase] = useState<RevealPhase>('silence');
   const [silenceSeconds, setSilenceSeconds] = useState(0);
+  const [aftermathSeconds, setAftermathSeconds] = useState(0);
   const silenceStartedAt = useRef(0);
   const reduced = useReducedMotion();
   const cutSound = useScore(scene, sound, paused);
+
+  useEffect(() => {
+    const delayed = window.setTimeout(() => {
+      [...Object.values(artworkFiles), shoeFile].forEach(source => { const image = new Image(); image.src = source; });
+    }, 450);
+    return () => window.clearTimeout(delayed);
+  }, []);
 
   const select = useCallback((next: Reconstruction, preserveTime = true) => {
     setSeconds(current => preserveTime && isCut(scene) && current < 11 ? current : 0);
@@ -93,7 +101,7 @@ export default function App() {
   const reveal = () => {
     cutSound();
     silenceStartedAt.current = performance.now();
-    setSilenceSeconds(0); setPhase('silence');
+    setSilenceSeconds(0); setAftermathSeconds(0); setPhase('silence');
     setScene('original'); setAutomatic(false); setPaused(false);
   };
   const replay = () => { setScene('archive'); setSeconds(0); setPaused(false); setAutomatic(false); };
@@ -130,17 +138,19 @@ export default function App() {
   useEffect(() => {
     if (scene !== 'original') return;
     let frame = 0;
-    let verdictTimer = 0;
     const tick = () => {
       const elapsed = performance.now() - silenceStartedAt.current;
-      setSilenceSeconds(Math.min(11, Math.floor(elapsed / 1000)));
-      if (elapsed >= 11000) {
-        setPhase('zero');
-        verdictTimer = window.setTimeout(() => setPhase('verdict'), 2100);
-      } else frame = requestAnimationFrame(tick);
+      if (elapsed < 11000) {
+        setSilenceSeconds(Math.floor(elapsed / 1000));
+      } else {
+        setSilenceSeconds(11);
+        setAftermathSeconds(Math.min(10, (elapsed - 11000) / 1000));
+        setPhase(elapsed >= 19000 ? 'verdict' : 'aftermath');
+      }
+      if (elapsed < 21000) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(frame); window.clearTimeout(verdictTimer); };
+    return () => cancelAnimationFrame(frame);
   }, [scene]);
 
   useEffect(() => {
@@ -162,28 +172,26 @@ export default function App() {
       <button className="sound-control" onClick={() => setSound(value => !value)} aria-label={sound ? 'Mute sound' : 'Enable sound'} aria-pressed={sound}>{sound ? 'SOUND ON' : 'SOUND OFF'}</button>
     </header>
     <section className="stage" aria-label={scene === 'original' ? 'Original footage request' : 'Missing archive interval'}>
-      {scene !== 'original' && <SceneArtwork cut={current?.id ?? 'romance'} seconds={current ? seconds : 0} reducedMotion={reduced} />}
+      {scene !== 'original' && <SceneArtwork cut={current?.id ?? 'master'} seconds={current ? seconds : 0} reducedMotion={reduced} />}
+      {scene === 'original' && phase !== 'silence' && <SceneArtwork cut="final" seconds={aftermathSeconds} reducedMotion={reduced} />}
       <div className="stage-vignette" aria-hidden="true" />
       {scene === 'archive' && <div className="opening">
         <p className="overline">EVENT 011 — 11 SECONDS MISSING</p>
         <h1>ELEVEN SECONDS.<br/><em>ZERO FRAMES.</em></h1>
         <p className="subtitle">Four histories of an event no camera ever saw.</p>
         <div className="gap-timeline" aria-hidden="true"><span>02:17:08</span><i/><span>02:17:19</span></div>
-        <p className="availability">FOUR SYNTHETIC RECONSTRUCTIONS AVAILABLE</p>
+        <p className="availability">FOUR RECONSTRUCTIONS AVAILABLE</p>
         <button className="primary-action" onClick={start}>ENTER THE GAP <span aria-hidden="true">↗</span></button>
       </div>}
       {current && <>
         <div className="timecode" aria-label={`Archive timecode ${eventTime(seconds)}`}><span>CAM 06 / SYNTHETIC</span><strong>{eventTime(seconds)}</strong></div>
-        <div className="chapter-number" aria-hidden="true">0{indexOf(scene) + 1}<small> / 04</small></div>
         <div className="scene-caption"><span>{current.name} / RECONSTRUCTION 0{indexOf(scene) + 1}</span><h2>{current.claim}</h2><p>{current.imprint}</p></div>
-        {scene === 'security' && <div className="security-label" aria-hidden="true">INFERENCE ONLY <span>↗</span></div>}
-        {scene === 'commerce' && <div className="commerce-seal" aria-hidden="true">M<small>011</small></div>}
         <div className="progress-line" aria-label={`${Math.floor(seconds)} of 11 seconds`}><i style={{width:`${seconds / 11 * 100}%`}} /></div>
       </>}
       {scene === 'original' && <div className={`reveal reveal-${phase}`} aria-live="polite">
-        {(phase === 'silence' || phase === 'zero') && <p className="silence-timecode" role="timer" aria-live="off">00:{String(silenceSeconds).padStart(2, '0')}</p>}
-        {(phase === 'zero' || phase === 'verdict') && <p className="zero-line">ORIGINAL FRAMES RECOVERED: <strong>0</strong></p>}
-        {phase === 'verdict' && <h2>FOUR HISTORIES.<br/><em>ZERO FRAMES.</em></h2>}
+        {phase === 'silence' && <p className="silence-timecode" role="timer" aria-live="off">00:{String(silenceSeconds).padStart(2, '0')}</p>}
+        {phase !== 'silence' && <p className="zero-line">ORIGINAL FRAMES RECOVERED: <strong>0</strong></p>}
+        {phase === 'verdict' && <h2>NOTHING WAS RECORDED.<br/><em>EVERYTHING WAS DECIDED.</em></h2>}
       </div>}
     </section>
     <footer className="controls">

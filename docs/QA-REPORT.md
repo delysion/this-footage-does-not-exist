@@ -1,28 +1,26 @@
 # ELEVEN SECONDS. ZERO FRAMES. — QA report
 
-Tested 10 October 2026. Results below describe actions actually performed on the revised work.
+Tested 10 October 2026. This report describes actions performed on the current redesigned work, not tests presumed from code.
 
-## Website
+## Production website
 
-- `npm run build`: **pass**. TypeScript and Vite produced the static `dist/` bundle. No external runtime asset is required.
-- Real Chromium browser, local URL `http://localhost:4174/`, desktop 1440×900: **pass** for opening, all four chapters, preserved timecode when switching, pause/play, sound toggle, arrow keys, Escape, original request, eleven-second black interval, final wording, replay and hard refresh. Monotonic in-page measurements from the actual click event to the first zero-frame line were **11,003 ms** and **11,006 ms** in successive runs; the programmed interval is 11,000 ms, with one browser rendering frame of possible latency. The audio gain is explicitly zeroed in the click handler. At five seconds, the screenshot contained only the clock. No browser page errors, console errors, HTTP ≥400 responses or horizontal overflow.
-- Real Chromium browser, tablet 768×1024: **pass** for chapter controls and overflow.
-- Real Chromium browser, mobile 390×844: **pass** for opening, four chapters, final reveal and overflow. Visual screenshots show legible captions and the recurring doorway/figures/shoe.
-- Browser with `prefers-reduced-motion: reduce`: **pass**. The reconstruction timecode stays still and CSS animations are removed; the artist's eleven-second final silence and clock remain intact.
-- The current site uses local authored SVG/CSS, system fonts and opt-in Web Audio; the network check found no missing image/font assets. The on-page Security confidence wording says **SIMULATED CONFIDENCE** and **INFERENCE ONLY**.
+- Vercel CLI resumed the paused project with the artist's authorization. Explicit Preview `dpl_HMU2n4r1J6ve61hqN3bY5QCewbkB` built and reached **READY**. The real Preview URL was opened in an authenticated in-app browser; all four chapters and the original-footage reveal rendered.
+- Production deployment `dpl_AidXTLmsHM6ngs49Zu6Reif9UXb9` built successfully and was aliased to [the public URL](https://this-footage-does-not-exist.vercel.app/). A request without credentials returned **HTTP 200** and the correct title. The production URL was opened in the in-app browser and visually inspected.
+- Automated Chrome/Playwright checks against the **actual unauthenticated production URL** passed at 1440×900 desktop, 768×1024 tablet and 390×844 mobile. The script entered the experience, visited all four chapters, checked artwork/claims, pause/play, sound toggle, arrow keys, Escape, source request, replay and hard refresh. The reduced-motion context held reconstruction motion still while retaining the eleven-second clock. No page exceptions, console errors, HTTP ≥400 responses or horizontal overflow were recorded.
+- Timing was measured from the actual `SHOW ORIGINAL FOOTAGE` click to the first post-silence phase using `performance.now()` and a mutation observer: **11,009 ms** on production and **11,008 ms** locally. The implementation threshold is 11,000 ms; the additional 8–9 ms is browser-frame scheduling. At five seconds only the clock was visible. Web Audio gain is set to zero synchronously in the click handler.
+- [Production screenshots](../screenshots-production/) include opening, Romance, Security, Revolution, Commerce, five seconds of silence and the conclusion on desktop/mobile, plus a tablet scene. Visual inspection confirms the same hall, red doorway, two figures and damaged shoe in the four versions; the final room retains the institutions' material additions but removes the figures. The mobile composition and text are readable at 390 px.
 
-The automated browser check is reproducible with `node tools_browser_qa.mjs` while the Vite server is running on port 4174 (or pass another URL). Browser screenshots are in [`screenshots/`](../screenshots/): [opening](../screenshots/opening-desktop.png), [Romance](../screenshots/romance-desktop.png), [Security](../screenshots/security-desktop.png), [Revolution](../screenshots/revolution-desktop.png), [Commerce](../screenshots/commerce-desktop.png), [five seconds of silence](../screenshots/silence-desktop.png), [final](../screenshots/reveal-desktop.png), and corresponding mobile frames.
+Run `node tools_browser_qa.mjs https://this-footage-does-not-exist.vercel.app/ screenshots-production` to repeat the production checks. The seven principal images, poster and sound file are all local assets; no external font, paid API, tracking or runtime AI call is used.
 
-## Film
+## Film and imagery
 
-- `npm run render`: **pass**. [Rendered MP4](../artifacts/eleven-seconds-zero-frames.mp4) is 66.005 seconds, 1600×900, 24 fps, H.264 with AAC audio, 8.1 MB. Metadata checked with the bundled `ffprobe`.
-- Extracted and visually inspected frames at 3, 11, 22, 33, 44, 50.2, 55, 60.5, 62 and 64 seconds, covering opening, four reconstructions, the entire eleven-second clock passage, zero-frame count and ending. The four cuts show the same anchors and repeated interval.
-- Opened the actual revised MP4 in a browser video player: **pass**. Browser reported `readyState=4`, `duration=66.005`, no media error, and playback time advanced beyond six seconds.
-- The soundtrack is generated by `tools_generate_sound.py`; it stops at the 50-second image cut. Decoding half-second windows from the MP4 yielded normalized RMS **0.0044994** at 49 s and **0.0** at 50.5, 55 and 60.5 s. The updated score and mix still require the artist's listening review.
+- `npm run render` completed. [Actual MP4](../artifacts/eleven-seconds-zero-frames.mp4): **73.003 seconds**, 1600×900, 24 fps, H.264 video plus AAC audio, 53.9 MB. `ffprobe` confirmed metadata. A browser video element reported `readyState=4`, `duration=73.003`, no media error and advancing playback with sound unmuted.
+- Decoded and inspected a [12-frame film sheet](../artifacts/film-verification-contact-sheet.png) at 3, 11, 22, 33, 44, 50.2, 55, 60.5, 61.5, 66, 70 and 72.5 seconds. It covers opening, each institutional transformation, the eleven-second blank interval, return to the room, repeated shoe close-up and final words.
+- Decoded MP4 audio has normalized RMS between **0.0056 and 0.0105** in sampled reconstruction windows, and **0.0** at 50.5, 55, 60.5, 61.5 and 70 seconds. Sound stops at the 50-second cut and remains absent through the blackout and aftermath. `tools_verify_media.py` reproduces this check.
+- [Six-frame architectural contact sheet](../artifacts/six-frame-contact-sheet.png) and [poster](../artifacts/poster.png) were visually inspected. The source images were generated for the artwork and edited sequentially; see [asset provenance](ASSET-PROVENANCE.md).
 
-## Deployment and remaining gates
+## Remaining artistic decisions
 
-- Existing Vercel project `this-footage-does-not-exist` and authenticated earlier Preview were audited before the revision. The production alias returned `503 DEPLOYMENT_PAUSED`.
-- The earlier revised Preview attempt at `https://this-footage-does-not-exist-3qrpfc25o-delysions-projects.vercel.app` (`dpl_vitFbLuxehWoDHVCEVrFBxCiioNo`) was **blocked** because the project was paused. The artist has now explicitly authorized reactivation and publication. A Vercel CLI resume attempt returned `action_required / confirmation_required`: the account owner must run and confirm the resume command interactively. The production URL still returned HTTP 503 `DEPLOYMENT_PAUSED` on 10 October 2026 at 06:48 UTC. The new eleven-second version has not yet been verified live.
-- Vercel MCP, Vercel agent-browser and the requested Vercel/Remotion skills were unavailable. Vercel CLI, local Playwright/Chromium, the Codex in-app browser and Remotion CLI were used instead.
-- The artist personally directed the eleven-second silent ending and confirmed the shared anchors. The artist has expressly withheld final approval of the updated MP4, images and mix pending viewing; the competition entry has not been submitted.
+The artist directed the redesign, exact silence, anchors, material consequences and provisional final sentence, but has **not yet viewed and approved this MP4, these generated images or the mix**. Their image choice, audio judgment, final public credit and approval of submission text remain open in [ARTIST_DECISIONS.md](../ARTIST_DECISIONS.md). The competition entry has not been submitted.
+
+Vercel MCP, Vercel agent-browser and the requested Vercel/Remotion skills were unavailable. Vercel CLI, local Playwright Chrome, the Codex in-app browser and Remotion CLI were used and are named accurately here.

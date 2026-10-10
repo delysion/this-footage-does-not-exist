@@ -11,7 +11,7 @@ with ZipFile(out, "w", compression=ZIP_DEFLATED, compresslevel=6) as archive:
         if not file.is_file():
             continue
         relative = file.relative_to(root)
-        if any(part in excluded_dirs for part in relative.parts) or file.suffix == ".zip":
+        if any(part in excluded_dirs for part in relative.parts) or file.suffix == ".zip" or file.name.startswith(".env"):
             continue
         archive.write(file, relative.as_posix())
 
