@@ -4,6 +4,8 @@ An interactive cinematic artwork. Eleven seconds were never recorded. Four insti
 
 Source repository: [GitHub](https://github.com/delysion/this-footage-does-not-exist) (currently private).
 
+The [Vercel Preview](https://this-footage-does-not-exist-3zj0zok5c-delysions-projects.vercel.app) is built and verified but requires the connected Vercel account. The production project is paused pending the artist's review and publication approval.
+
 ## Run
 
 Requires Node.js 20+ and npm. No backend, account, tracking, or runtime AI service is used.

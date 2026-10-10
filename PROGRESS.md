@@ -30,3 +30,10 @@
 - Created the private GitHub repository `delysion/this-footage-does-not-exist` using the account's stored Git credential. Set local branch to `main`, added `origin`, and pushed the full committed project.
 - Verified GitHub's repository metadata through the connected GitHub tool and confirmed that `refs/heads/main` on the remote equals local commit `f4285abe2deda397c5c8708eaea39acb9016d41f`.
 - The repository is private pending a deliberate decision to release the source publicly. Vercel authentication, deployment, public URL verification, and artist review remain pending.
+
+## 2026-10-10 · Milestone 6 — authenticated Vercel Preview
+- Signed in to Vercel CLI as `delysion`, created project `this-footage-does-not-exist`, and connected the private GitHub repository.
+- Vercel assigned the first CLI deployment to production automatically. Its alias was briefly publicly reachable before the project was paused. Verified the production alias now returns HTTP 503 `DEPLOYMENT_PAUSED`; Preview deployments remain available through Vercel authentication.
+- Created and inspected the explicit Preview deployment `dpl_CxZcjKwP9eBqJeQ172KK7vqUBVYU`, which passed its remote build. Tested its actual URL in the authenticated browser at desktop and 390 px mobile sizes, including all four reconstructions, keyboard navigation, reveal, replay, pause, sound, refresh, fonts, overflow and console errors.
+- Revised the opening to state `EVENT 011 — 11 SECONDS MISSING`, corrected a footer that said frames instead of seconds, and increased mobile control type to 10 px. Built locally, pushed the revision to GitHub and verified it on the second Preview.
+- Pending: artist's documented editorial review and explicit public-release approval; update production to the tested revision, resume the project, then test its unauthenticated public URL.
