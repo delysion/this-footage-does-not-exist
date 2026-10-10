@@ -1,5 +1,6 @@
 import { AbsoluteFill, Audio, Img, Sequence, interpolate, staticFile, useCurrentFrame } from 'remotion';
 import { eventTime, reconstructions, type ArtworkCut } from '../ui/SceneArtwork';
+import { GestureShot } from '../ui/GestureShot';
 
 const paper = '#f2e8db';
 const mono = 'Courier New, monospace';
@@ -40,13 +41,14 @@ function Chapter({index}: {index:number}) {
   const activeFrame = detail ? frame - 174 : frame < 174 ? frame : frame - 219;
   const accent = ['#efc4ae','#d2e4e8','#e9b76d','#f4dfb5'][index];
   const claimStyle = index === 1 ? {font:`56px ${mono}`,letterSpacing:-4} : index === 2 ? {font:'bold 72px Arial,sans-serif',letterSpacing:-4,textTransform:'uppercase' as const} : index === 3 ? {font:'64px Georgia,serif',letterSpacing:-3} : {font:'italic 68px Georgia,serif',letterSpacing:-3};
-  const textOpacity = detail ? 0 : interpolate(frame,[0,24,45,164,172,220,233],[0,0,1,1,0,0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
+  const textOpacity = frame < 45 ? interpolate(frame,[0,23,38,45],[0,0,1,0],{extrapolateLeft:'clamp',extrapolateRight:'clamp'}) : frame < 219 ? 0 : interpolate(frame,[219,234],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
   return <AbsoluteFill style={{color:paper,background:'#070707'}}>
     {!detail && <>
       {frame < 34 && <ImageShot src={room(previous)} frame={frame} direction={index%2 ? -1 : 1} />}
       <AbsoluteFill style={{clipPath:frame < 34 ? `inset(0 ${100-reveal}% 0 0)` : undefined}}><ImageShot src={room(cut)} frame={activeFrame} direction={index%2 ? 1 : -1} /></AbsoluteFill>
     </>}
     {detail && <ImageShot src={shoe} frame={activeFrame} detail direction={index%2 ? -1 : 1} />}
+    {!detail && frame >= 38 && frame < 174 && <GestureShot cut={cut} seconds={frame/24} roomSrc={room(cut)} gestureSrc={staticFile('art/gesture-hands.webp')} />}
     <div style={{position:'absolute',top:57,left:77,font:`11px ${mono}`,letterSpacing:3,textShadow:'0 2px 12px #000'}}>CAM 06 / SYNTHETIC<br/><strong style={{display:'block',marginTop:12,font:`20px ${mono}`,letterSpacing:2}}>{eventTime(frame/24)}</strong></div>
     <div style={{position:'absolute',top:54,right:80,font:`15px ${mono}`,letterSpacing:3,color:accent}}>0{index+1} / 04</div>
     <div style={{position:'absolute',bottom:94,left:84,opacity:textOpacity,textShadow:'0 3px 22px #000'}}>

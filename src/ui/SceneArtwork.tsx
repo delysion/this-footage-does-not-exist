@@ -1,3 +1,5 @@
+import { GestureShot } from './GestureShot';
+
 export type Reconstruction = 'romance' | 'security' | 'revolution' | 'commerce';
 export type ArtworkCut = Reconstruction | 'master' | 'final';
 
@@ -22,6 +24,7 @@ export const artworkFiles: Record<ArtworkCut, string> = {
   final: '/art/room-final-v2.webp',
 };
 export const shoeFile = '/art/master-shoe-v2.webp';
+export const gestureFile = '/art/gesture-hands.webp';
 
 /** Every institutional image is an edit of the preceding image in one physical room. */
 export function SceneArtwork({ cut, seconds, reducedMotion = false }: { cut: ArtworkCut; seconds: number; reducedMotion?: boolean }) {
@@ -32,10 +35,11 @@ export function SceneArtwork({ cut, seconds, reducedMotion = false }: { cut: Art
   const detailOpacity = cut === 'master' ? 0 : isFinal ? finalClose * finalReturn : t >= 7.2 && t < 9.25 ? 1 : 0;
   const roomZoom = reducedMotion ? 1 : isFinal ? 1.015 + Math.min(t, 9) * .007 : cut === 'master' ? 1.02 : 1.012 + Math.min(t, 11) * (cut === 'security' ? .0035 : .0022);
   const roomShift = reducedMotion ? 0 : isFinal ? Math.min(t, 9) * -.16 : cut === 'security' ? Math.min(t, 11) * -.1 : cut === 'revolution' ? Math.min(t, 11) * .08 : 0;
-  const label = cut === 'master' ? 'the unaltered fictional room with a red doorway, two distant figures and one damaged black shoe' : cut === 'final' ? 'the transformed room retains memorial, evidence, political banners and luxury display, while the doorway stands empty' : `${cut} reconstruction of the same red doorway, two distant figures and damaged black shoe, with accumulating material consequences`;
+  const label = cut === 'master' ? 'the unaltered fictional room with a red doorway, two distant figures and one damaged black shoe' : cut === 'final' ? 'the transformed room retains memorial, evidence, political banners and luxury display, while the doorway stands empty' : `${cut} reconstruction of the same room, doorway, two figures and damaged shoe; one reaching gesture is edited into an institutional claim`;
   return <div className={`scene-art scene-${cut}`} role="img" aria-label={label}>
     <img className="room-image" src={artworkFiles[cut]} alt="" draggable="false" style={{ transform: `translateX(${roomShift}%) scale(${roomZoom})` }} />
     <img className="object-image" src={shoeFile} alt="" draggable="false" style={{ opacity: reducedMotion ? 0 : detailOpacity }} />
+    {cut !== 'master' && cut !== 'final' && <GestureShot cut={cut} seconds={t} reducedMotion={reducedMotion} roomSrc={artworkFiles[cut]} gestureSrc={gestureFile} />}
     <div className="film-breath" aria-hidden="true" />
   </div>;
 }

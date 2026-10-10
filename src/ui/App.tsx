@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { artworkFiles, eventTime, reconstructions, SceneArtwork, shoeFile, type Reconstruction } from './SceneArtwork';
+import { artworkFiles, eventTime, gestureFile, reconstructions, SceneArtwork, shoeFile, type Reconstruction } from './SceneArtwork';
 
 type Scene = 'archive' | Reconstruction | 'original';
 type RevealPhase = 'silence' | 'aftermath' | 'verdict';
@@ -84,7 +84,7 @@ export default function App() {
 
   useEffect(() => {
     const delayed = window.setTimeout(() => {
-      [...Object.values(artworkFiles), shoeFile].forEach(source => { const image = new Image(); image.src = source; });
+      [...Object.values(artworkFiles), shoeFile, gestureFile].forEach(source => { const image = new Image(); image.src = source; });
     }, 450);
     return () => window.clearTimeout(delayed);
   }, []);
@@ -107,7 +107,7 @@ export default function App() {
   const replay = () => { setScene('archive'); setSeconds(0); setPaused(false); setAutomatic(false); };
 
   useEffect(() => {
-    if (!isCut(scene) || paused || reduced) return;
+    if (!isCut(scene) || paused) return;
     let frame = 0;
     let last = 0;
     let accumulated = 0;
@@ -125,7 +125,7 @@ export default function App() {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [scene, paused, reduced]);
+  }, [scene, paused]);
 
   useEffect(() => {
     if (!automatic || seconds < 11 || !isCut(scene)) return;
@@ -185,7 +185,7 @@ export default function App() {
       </div>}
       {current && <>
         <div className="timecode" aria-label={`Archive timecode ${eventTime(seconds)}`}><span>CAM 06 / SYNTHETIC</span><strong>{eventTime(seconds)}</strong></div>
-        <div className="scene-caption"><span>{current.name} / RECONSTRUCTION 0{indexOf(scene) + 1}</span><h2>{current.claim}</h2><p>{current.imprint}</p></div>
+        <div className="scene-caption" style={{opacity: seconds >= 1.8 && seconds < 7.45 ? 0 : 1}}><span>{current.name} / RECONSTRUCTION 0{indexOf(scene) + 1}</span><h2>{current.claim}</h2><p>{current.imprint}</p></div>
         <div className="progress-line" aria-label={`${Math.floor(seconds)} of 11 seconds`}><i style={{width:`${seconds / 11 * 100}%`}} /></div>
       </>}
       {scene === 'original' && <div className={`reveal reveal-${phase}`} aria-live="polite">
