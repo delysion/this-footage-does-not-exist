@@ -37,3 +37,18 @@
 - Created and inspected the explicit Preview deployment `dpl_CxZcjKwP9eBqJeQ172KK7vqUBVYU`, which passed its remote build. Tested its actual URL in the authenticated browser at desktop and 390 px mobile sizes, including all four reconstructions, keyboard navigation, reveal, replay, pause, sound, refresh, fonts, overflow and console errors.
 - Revised the opening to state `EVENT 011 — 11 SECONDS MISSING`, corrected a footer that said frames instead of seconds, and increased mobile control type to 10 px. Built locally, pushed the revision to GitHub and verified it on the second Preview.
 - Pending: artist's documented editorial review and explicit public-release approval; update production to the tested revision, resume the project, then test its unauthenticated public URL.
+
+## 2026-10-10 · Milestone 7 — new-title audit
+- The artist directed a substantial revision under the new public title `ELEVEN SECONDS. ZERO FRAMES.` while preserving the existing codebase and Vercel domain.
+- Opened the production URL in a real browser and confirmed its intentional `503 DEPLOYMENT_PAUSED` state. Audited the authenticated Preview at 1440 × 900 and 390 × 844, captured opening/four-scene/final screenshots, inspected sound and motion code, and wrote `ART_AUDIT.md` before editing the implementation.
+- Five priority weaknesses: near-static timing, weak common anchor/gesture (especially Revolution), caption-driven institutional identity, premature explanatory reveal, and inconsistent old-title/publication state.
+
+## 2026-10-10 · Milestone 8 — revised artwork and local QA
+- Replaced the scene-specific loops with one shared eleven-second reaching action in `SceneArtwork.tsx`. The red door, two figures, damaged black shoe and timestamp recur across Romance, Security, Revolution and Commerce. Direct chapter changes preserve the current timecode.
+- Updated the public title/subtitle, typographic treatments, sound synthesis and staged zero-frame absence. Revolution's crowd was moved around the shared figures after screenshot review.
+- Local Vite build passed. Automated Chromium checks at 1440×900, 768×1024 and 390×844 passed for chapters, pause/play, sound, keyboard navigation, reveal, replay, hard refresh, reduced motion, no overflow and no page/console/HTTP errors. Screenshots and OG preview image saved.
+- Attempted revised Vercel Preview `dpl_vitFbLuxehWoDHVCEVrFBxCiioNo`; Vercel marked it Blocked because the project is paused. Resuming would expose the existing production alias, so no unapproved change to public access was made.
+
+## 2026-10-10 · Milestone 9 — film and submission draft
+- Reworked Remotion to reuse the website's actual shared SVG action. Rendered `artifacts/eleven-seconds-zero-frames.mp4` (60.011s, 1600×900 H.264/AAC, 7.8MB) and inspected sampled frames. Opened the MP4 in a browser; playback advanced with no media error.
+- Updated README, competition description, AI Usage Notes, artist decision sheet, six-pillar adversarial review and QA report. The artist's latest title, subtitle, anchor and ending instructions are recorded as genuine human directions; final review and publication authorization remain pending.

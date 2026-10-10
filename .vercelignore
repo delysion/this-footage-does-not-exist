@@ -1,0 +1,10 @@
+artifacts/
+screenshots/
+docs/
+ART_AUDIT.md
+ARTIST_DECISIONS.md
+PROGRESS.md
+tools_browser_qa.mjs
+tools_video_check.html
+tools_package.py
+*.zip

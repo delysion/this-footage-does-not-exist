@@ -1,47 +1,22 @@
-# Adversarial review — internal single-agent pass
+# ELEVEN SECONDS. ZERO FRAMES. — adversarial review
 
-This is a critical self-review, not an independent agent or jury score. The six pillars below follow the published [curator's manifesto](https://conveneo.eu/artprize/blog/human-after-all-the-curators-manifesto) and the formal [judging checks](https://conveneo.eu/artprize/help/judging). The gallery examples are public submissions, not evidence of jury rankings.
+Internal review by one agent, not an independent juror or a jury score. Criteria come from the published [curators' manifesto](https://conveneo.eu/artprize/blog/human-after-all-the-curators-manifesto) and [judging checks](https://conveneo.eu/artprize/help/judging). Public gallery examples were inspected in the earlier audit; no private scores or rankings were available.
 
-## Creativity
+| Pillar | Strongest aspect | Serious vulnerability | Implemented change and reassessment |
+|---|---|---|---|
+| Creativity | A visitor can cut between four authorities at the same moment. | Four versions of missing time is a familiar premise. | The chapter switch now preserves the precise timecode and physical action. The cut itself becomes an argument about evidence. The premise is more specific, though the artist should still judge whether it feels singular. |
+| Authenticity | The invented archive honestly labels each image synthetic. | AI wrote the implementation and final artist review is unrecorded. | The public-facing work labels the views synthetic; the decision sheet identifies real human directions and leaves later approvals blank. This documents the gap but does not satisfy the human-review gate by itself. |
+| Visual inspiration | A fixed red threshold, black damaged shoe and reaching bodies survive every aesthetic regime. | The figures remain deliberately geometric and could read as illustrations instead of cinema. | A single moving action, camera variation, controlled light, visible crowd/forensic/product framing and a hard visual cut replaced static loops. Screenshots show stronger coherence. An artist could still request a more tactile treatment. |
+| Content and meaning | The same gesture becomes tenderness, threat, origin and commodity. | Captions can still lead the viewer too much. | Copy was cut to brief claims; the repeated image and institutional frames now do more of the narrative work. The captions remain intentionally terse and may merit further artist editing. |
+| Sincerity | No borrowed footage, stock faces or unlicensed score masquerade as evidence. | A polished zero-frame finale can feel like a neat thesis. | The previous instant explanation was removed; retrieval, silence and empty time precede only the artist's two final lines. The ending retains ambiguity while stating the absence. |
+| Uniqueness | The source image never appears, and each synthetic cut shares the same geometry and time. | Blankness and lost time also appear in public entries and existing screen works. | The interaction was centered on provenance and institutional self-interest, rather than a generic mystery or blank canvas. Distinctiveness improved, but no prize outcome can be inferred. |
 
-- **Strongest:** One interval gets four narratively incompatible institutional edits, with a continuous visual grammar (one timecode, red door, paired figures and one shoe).
-- **Main risk:** “Missing time” and “four versions of a mystery” can become familiar speculative-fiction shorthand.
-- **Improvement / reassessment:** Anchors repeat with their meaning changing in each cut, and the institutions' incentives are made specific: intimacy, threat, uprising and a priced memory. Their edits disagree while the underlying composition does not.
+## Automatic rejection checks
 
-## Authenticity
+- **A / Dashboard:** The browser shows one projection frame and sparse controls, with no cards or template interface. Pass in the tested local screenshots.
+- **B / Explanation:** `EVENT 011 — 11 SECONDS MISSING` and the four available synthetic views appear on entry. Pass in the local browser.
+- **C / Unrelated events:** The same doorway, two figures, shoe, gesture and timecode recur; switching chapters preserves the moment. Pass in the local browser and rendered film frames.
+- **D / Weak reveal:** The old instant text wall was replaced by retrieval, an empty silent interval, a zero count and the final phrase. Stronger in browser/film, but emotional impact remains an artist judgment.
+- **E / Screenshot-only:** The local browser QA exercised navigation, reveal, replay, hard refresh, mobile and reduced motion. The revised Preview could not be built while the Vercel project is paused; production verification is outstanding.
 
-- **Strongest:** The work uses hand-authored source vectors and local synthesis; it does not simulate a generative model as an independent witness. The zero-frame reveal matches the actual construction.
-- **Main risk:** The implementation began from an AI-assisted brief and no artist review has been recorded. Without human editorial choices, authorship criteria are not yet met.
-- **Improvement / reassessment:** AI involvement and all outstanding artist decisions are disclosed in the review sheet. This is honest documentation, not a substitute for the artist's required material review.
-
-## Visual inspiration
-
-- **Strongest:** Dark room, a red-lit threshold and carefully differentiated romance, forensic, monumental and luxury treatments carry the same visual facts across cuts.
-- **Main risk:** Reduced geometric figures may read as placeholders if every scene remains a static poster.
-- **Improvement / reassessment:** The website adds scene-specific movement and overlays; the MP4 uses slow reframing, controlled escalation and distinct transitions. Browser QA exposed and led to a correction of a security-overlay/caption collision.
-
-## Content and meaning
-
-- **Strongest:** Visitors encounter incompatible claims before the reveal explains their provenance through an absence and a literal count of zero.
-- **Main risk:** A gap alone may be mistaken for an invitation to invent meaning without a critique of who controls the meaning.
-- **Improvement / reassessment:** The scenes attach concrete institutional interests to the same evidence; the commerce cut makes the claim overtly purchasable, while security assigns intent not visible in the shared images.
-
-## Sincerity
-
-- **Strongest:** No outside source footage or borrowed score is passed off as archival evidence; the sound source is reproducible local code and begins opt-in on the website.
-- **Main risk:** The application requires real author choices; an accurate draft note cannot invent them.
-- **Improvement / reassessment:** The decision sheet records this as pending and prohibits using the authorship declarations until the artist has reviewed and changed or affirmed the final work.
-
-## Uniqueness
-
-- **Strongest:** The audience actively moves between four institutional interpretations before requesting an unrecorded original; this is an interaction about provenance, not a fifth image.
-- **Main risk:** The current public gallery includes *The Part I Did Not Let It Fill*, which also gives deliberate meaning to an unfilled area, and *Borrowed Eternity*, which treats lost time and uncertainty. A generic “blankness is human” reading would collide with familiar territory.
-- **Improvement / reassessment:** The work's identifying action is now framed around competing institutional claims to one repeated record and a provenance failure. Unlike the public examples' landscape/canvas and solitary figure, the piece stages a shared evidence chain, four conflicting edits and a requested source that returns no frames. This distinction helps, but artist-specific choices are still needed to establish a singular artistic identity.
-
-## Five rejection tests
-
-- **A — Template/dashboard:** The website uses one full-bleed projection frame and sparse archive captions; no cards, charts or SaaS dashboard. **Pass on local screenshots.**
-- **B — Paragraph before premise:** The title, exact interval and “11 seconds missing” appear immediately. **Pass in browser.**
-- **C — Four unrelated events:** Doorway, figures, shoe and exact timecode recur. **Pass in implementation.**
-- **D — Weak reveal:** The browser now sheds header and chapter controls at the original request, leaving the doorway trace, zero count and a restrained replay control. **Pass in local browser; artistic impact still needs the artist's judgment.**
-- **E — Screenshot-only quality:** The project was used through its real controls at desktop and mobile viewports and hard-refreshed; no console or HTTP errors and no mobile horizontal overflow were recorded. **Pass for local browser coverage; production URL remains untested.**
+The most serious remaining rejection risk is the competition's human creative choice requirement. The artist must review and materially influence the final result before submission. The production URL is also still paused pending explicit publication authorization.

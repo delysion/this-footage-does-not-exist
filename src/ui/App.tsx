@@ -1,71 +1,176 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { eventTime, reconstructions, SceneArtwork, type Reconstruction } from './SceneArtwork';
 
-type Scene = 'archive'|'romance'|'security'|'revolution'|'commerce'|'original';
-const cuts: {id:Scene;title:string;label:string;line:string;stamp:string}[] = [
- {id:'romance',title:'ROMANCE',label:'A meeting, almost remembered.',line:'At 02:17:08, someone stayed.',stamp:'THE LAST LIGHT BETWEEN TWO PEOPLE'},
- {id:'security',title:'SECURITY',label:'An approach. A breach. A suspect.',line:'Subject enters frame. Intent: hostile.',stamp:'THREAT CONFIDENCE 98.4%'},
- {id:'revolution',title:'REVOLUTION',label:'The night the crowd began.',line:'At 02:17:08, a city stood up.',stamp:'THE FIRST NIGHT OF THE UPRISING'},
- {id:'commerce',title:'COMMERCE',label:'Keep the moment. Own the feeling.',line:'The memory, made yours.',stamp:'AUTHENTIC MOMENT™ · €11 / FRAME'},
-];
-const indexOf=(s:Scene)=>cuts.findIndex(c=>c.id===s);
+type Scene = 'archive' | Reconstruction | 'original';
+type RevealPhase = 'request' | 'empty' | 'zero' | 'verdict';
+const isCut = (scene: Scene): scene is Reconstruction => reconstructions.some(item => item.id === scene);
+const indexOf = (scene: Scene) => reconstructions.findIndex(item => item.id === scene);
 
-function Vision({scene}:{scene:Scene}) {
- const special=scene==='original';
- return <svg className={`vision ${scene}`} viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid slice" role="img" aria-label={special?'An empty black frame with a red doorway outline':'Stylized reconstruction of the same surveillance interval'}>
-  <defs>
-   <linearGradient id="room" x1="0" x2="1" y1="1" y2="0"><stop stopColor="#08090b"/><stop offset=".51" stopColor="#27201c"/><stop offset="1" stopColor="#090b0e"/></linearGradient>
-   <radialGradient id="halo"><stop stopColor="var(--glow)" stopOpacity=".58"/><stop offset="1" stopColor="var(--glow)" stopOpacity="0"/></radialGradient>
-   <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
-   <filter id="grain"><feTurbulence baseFrequency=".78" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values=".3 0 0 0 0 .3 0 0 0 0 .3 0 0 0 0 0 0 0 .13 0"/></filter>
-  </defs>
-  {!special&&<><rect width="1200" height="675" fill="url(#room)"/><ellipse cx="590" cy="360" rx="410" ry="300" fill="url(#halo)" filter="url(#soft)"/>
-   <path className="architecture" d="M0 525 290 470 550 505 820 461 1200 520v155H0Z"/><path className="door" d="M510 137h192v354H510z"/><path className="doorlight" d="M528 155h157v310H528z"/>
-   <g className="person p1"><path className="figure f1" d="M488 278q-32 1-37 42l-14 121 37 7 18-90 8 101 55-3-8-127q-6-49-59-51Z"/><circle className="head" cx="467" cy="248" r="24"/></g>
-   <g className="person p2"><path className="figure f2" d="M718 270q36-2 47 40l22 112-37 12-26-78 7 102-59 5-4-130q1-53 50-61Z"/><circle className="head" cx="741" cy="241" r="23"/></g>
-   <path className="shoe" d="m619 502 58-4 22 17-7 12-88 1q-9-15 15-26Z"/>
-   {scene==='revolution'&&<><path className="crowd" d="M0 500q28-64 53 0 29-98 59 0 29-115 59 0 31-79 61 0 27-136 58 0 35-96 67 0 27-128 57 0 31-89 61 0 31-132 63 0 29-96 59 0 36-120 68 0 28-87 57 0 27-116 57 0 35-69 65 0 31-106 62 0 30-80 59 0 35-126 67 0 24-72 49 0v175H0Z"/></>}
-   <rect width="1200" height="675" filter="url(#grain)" opacity=".18"/>
-  </>}
-  {special&&<><rect width="1200" height="675" fill="#050505"/><path d="M510 137h192v354H510z" fill="none" stroke="#6e2b27" strokeWidth="1" opacity=".32"/><path d="M528 155v310" stroke="#9f5145" strokeWidth="1" opacity=".25"/></>}
- </svg>;
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(query.matches);
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  return reduced;
 }
 
-function useTone(scene:Scene, enabled:boolean) {
- const ctx=useRef<AudioContext|null>(null); const osc=useRef<OscillatorNode|null>(null); const gain=useRef<GainNode|null>(null);
- useEffect(()=>{
-  if(!enabled||scene==='archive'||scene==='original'){ if(gain.current) gain.current.gain.setTargetAtTime(0,ctx.current!.currentTime,.15); return; }
-  const Ctx=window.AudioContext; if(!ctx.current) ctx.current=new Ctx(); const c=ctx.current; void c.resume();
-  if(!osc.current){osc.current=c.createOscillator();gain.current=c.createGain();osc.current.type='sine';osc.current.connect(gain.current);gain.current.connect(c.destination);osc.current.start();}
-  const freqs:Record<string,number>={romance:110,security:55,revolution:73.42,commerce:164.81};
-  osc.current!.frequency.setTargetAtTime(freqs[scene]??80,c.currentTime,.5);gain.current!.gain.setTargetAtTime(.035,c.currentTime,.35);
-  return ()=>{if(gain.current&&ctx.current)gain.current.gain.setTargetAtTime(0,ctx.current.currentTime,.2);};
- },[scene,enabled]);
+function useScore(scene: Scene, enabled: boolean, paused: boolean) {
+  const audio = useRef<{ context: AudioContext; low: OscillatorNode; high: OscillatorNode; gain: GainNode } | null>(null);
+  useEffect(() => {
+    if (enabled && !audio.current) {
+      const context = new AudioContext();
+      const low = context.createOscillator();
+      const high = context.createOscillator();
+      const gain = context.createGain();
+      low.type = 'sine'; high.type = 'triangle'; gain.gain.value = 0;
+      low.connect(gain); high.connect(gain); gain.connect(context.destination);
+      low.start(); high.start();
+      audio.current = { context, low, high, gain };
+    }
+    const a = audio.current;
+    if (!a) return;
+    void a.context.resume();
+    const now = a.context.currentTime;
+    if (!enabled || paused || !isCut(scene)) {
+      a.gain.gain.setTargetAtTime(0, now, scene === 'original' ? .012 : .07);
+      return;
+    }
+    const score = {
+      romance: [110, 164.81, .020], security: [55, 73.42, .022],
+      revolution: [73.42, 146.84, .026], commerce: [164.81, 329.62, .013],
+    }[scene];
+    a.low.frequency.setTargetAtTime(score[0], now, .35);
+    a.high.frequency.setTargetAtTime(score[1], now, .35);
+    a.gain.gain.setTargetAtTime(score[2], now, .28);
+    if (scene === 'security' || scene === 'revolution') {
+      const pulse = window.setInterval(() => {
+        const time = a.context.currentTime;
+        a.gain.gain.setTargetAtTime(scene === 'security' ? .004 : .038, time, .025);
+        a.gain.gain.setTargetAtTime(score[2], time + .18, .055);
+      }, scene === 'security' ? 610 : 890);
+      return () => window.clearInterval(pulse);
+    }
+  }, [scene, enabled, paused]);
+  useEffect(() => () => { if (audio.current) void audio.current.context.close(); }, []);
 }
 
-export default function App(){
- const [scene,setScene]=useState<Scene>('archive'); const [sound,setSound]=useState(false); const [paused,setPaused]=useState(false); const [seen,setSeen]=useState<Scene[]>([]);
- useTone(scene,sound&&!paused);
- const move=useCallback((n:number)=>{const next=cuts[(indexOf(scene)+n+4)%4];setScene(next.id);setSeen(v=>v.includes(next.id)?v:[...v,next.id]);setPaused(false)},[scene]);
- const start=()=>{setScene('romance');setSeen(['romance']);setPaused(false)};
- const replay=()=>{setScene('archive');setSeen([]);setPaused(false)};
- useEffect(()=>{const k=(e:KeyboardEvent)=>{if(e.key==='ArrowRight'&&indexOf(scene)>=0)move(1);if(e.key==='ArrowLeft'&&indexOf(scene)>=0)move(-1);if(e.key==='Escape'&&scene!=='archive')setScene('archive')};window.addEventListener('keydown',k);return()=>window.removeEventListener('keydown',k)},[scene,move]);
- const current=cuts[indexOf(scene)];
- return <main className={`installation ${scene} ${paused?'paused':''}`}>
-  <div className="ambient" aria-hidden="true"/><header className="masthead"><span className="mark">ARCHIVE / 04</span><span>FIELD NOTE 11—A</span><button className="sound" onClick={()=>setSound(!sound)} aria-label={sound?'Mute sound':'Enable sound'}>{sound?'SOUND ON':'SOUND OFF'}</button></header>
-  <section className="stage" aria-live="polite">
-   <Vision scene={scene}/><div className="frame-edge"/>
-   {scene==='archive'&&<div className="opening"><p className="eyebrow">EVENT 011 — 11 SECONDS MISSING</p><h1>THIS FOOTAGE<br/><em>DOES NOT EXIST</em></h1><div className="gap"><span>02:17:08</span><i/><span>02:17:19</span><b>NO RECORDED FRAMES</b></div><p className="premise">Four reconstructions are available.</p><button className="enter" onClick={start}>ENTER THE GAP <span>↗</span></button></div>}
-   {current&&<div className="caption"><span>{current.stamp}</span><h2>{current.line}</h2></div>}
-   {scene==='security'&&<div className="reticle" aria-hidden="true"><i/><span>SUBJECT 02 · 98.4%</span></div>}
-   {scene==='commerce'&&<div className="seal">M<br/><small>MEMORY / No. 011</small></div>}
-   {scene==='original'&&<div className="reveal"><span className="eyebrow">REQUEST COMPLETE</span><h2>ORIGINAL FRAMES<br/>RECOVERED: <i>0</i></h2><p>FOUR RECONSTRUCTIONS. NO ORIGINAL.</p><small>YOU HAVE SEEN FOUR VERSIONS OF WHAT HAPPENED.<br/>YOU HAVE SEEN NONE OF IT.</small></div>}
-   {current&&<div className="index" aria-hidden="true">0{indexOf(scene)+1}<span> / 04</span></div>}
-  </section>
-  <footer className="controls">
-   <div className="control-left">{scene==='archive'?<span>11 SECONDS ABSENT FROM THE RECORD</span>:scene==='original'?<span>END OF AVAILABLE RECORD</span>:<><button onClick={()=>move(-1)} aria-label="Previous reconstruction">←</button><span>PREVIOUS / NEXT</span><button onClick={()=>move(1)} aria-label="Next reconstruction">→</button></>}</div>
-   <nav className="chapters" aria-label="Reconstructions">{cuts.map((c,i)=><button key={c.id} className={scene===c.id?'active':''} aria-label={`View ${c.title.toLowerCase()} reconstruction`} aria-current={scene===c.id?'step':undefined} onClick={()=>{setScene(c.id);setSeen(v=>v.includes(c.id)?v:[...v,c.id])}}><i>{String(i+1).padStart(2,'0')}</i><span>{c.title}</span></button>)}</nav>
-   <div className="control-right">{scene==='archive'?<span>02:17:08 — 02:17:19</span>:scene==='original'?<button className="request" onClick={replay}>REPLAY ↺</button>:<><button className="pause" onClick={()=>setPaused(!paused)}>{paused?'PLAY':'PAUSE'} {paused?'▶':'Ⅱ'}</button><button className="request" onClick={()=>setScene('original')}>SHOW ORIGINAL FOOTAGE <span>↗</span></button></>}</div>
-  </footer>
-  <div className="sr-only" aria-live="polite">{seen.length} of 4 reconstructions viewed</div>
- </main>;
+export default function App() {
+  const [scene, setScene] = useState<Scene>('archive');
+  const [seconds, setSeconds] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [sound, setSound] = useState(false);
+  const [automatic, setAutomatic] = useState(false);
+  const [phase, setPhase] = useState<RevealPhase>('request');
+  const reduced = useReducedMotion();
+  useScore(scene, sound, paused);
+
+  const select = useCallback((next: Reconstruction, preserveTime = true) => {
+    setSeconds(current => preserveTime && isCut(scene) && current < 11 ? current : 0);
+    setScene(next); setPaused(false); setAutomatic(false);
+  }, [scene]);
+  const move = useCallback((step: number) => {
+    const next = reconstructions[(indexOf(scene) + step + 4) % 4];
+    select(next.id);
+  }, [scene, select]);
+  const start = () => { setSeconds(0); setScene('romance'); setPaused(false); setAutomatic(true); };
+  const reveal = () => { setScene('original'); setAutomatic(false); setPaused(false); setPhase(reduced ? 'verdict' : 'request'); };
+  const replay = () => { setScene('archive'); setSeconds(0); setPaused(false); setAutomatic(false); };
+
+  useEffect(() => {
+    if (!isCut(scene) || paused || reduced) return;
+    let frame = 0;
+    let last = 0;
+    let accumulated = 0;
+    const tick = (now: number) => {
+      if (!last) last = now;
+      const delta = Math.min(.08, (now - last) / 1000);
+      last = now;
+      accumulated += delta;
+      if (accumulated >= 1 / 30) {
+        const advance = accumulated;
+        accumulated = 0;
+        setSeconds(current => Math.min(11, current + advance));
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [scene, paused, reduced]);
+
+  useEffect(() => {
+    if (!automatic || seconds < 11 || !isCut(scene)) return;
+    const following = reconstructions[indexOf(scene) + 1];
+    if (!following) { setAutomatic(false); return; }
+    const timer = window.setTimeout(() => { setScene(following.id); setSeconds(0); }, 350);
+    return () => window.clearTimeout(timer);
+  }, [automatic, scene, seconds]);
+
+  useEffect(() => {
+    if (scene !== 'original') return;
+    if (reduced) { setPhase('verdict'); return; }
+    setPhase('request');
+    const timers = [
+      window.setTimeout(() => setPhase('empty'), 1450),
+      window.setTimeout(() => setPhase('zero'), 3750),
+      window.setTimeout(() => setPhase('verdict'), 6500),
+    ];
+    return () => timers.forEach(window.clearTimeout);
+  }, [scene, reduced]);
+
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight' && isCut(scene)) { event.preventDefault(); move(1); }
+      if (event.key === 'ArrowLeft' && isCut(scene)) { event.preventDefault(); move(-1); }
+      if (event.key === ' ' && isCut(scene) && event.target === document.body) { event.preventDefault(); setPaused(value => !value); }
+      if (event.key === 'Escape' && scene !== 'archive') replay();
+    };
+    window.addEventListener('keydown', key);
+    return () => window.removeEventListener('keydown', key);
+  }, [scene, move]);
+
+  const current = isCut(scene) ? reconstructions[indexOf(scene)] : null;
+  return <main className={`installation ${scene}`}>
+    <header className="masthead">
+      <span className="identity">ELEVEN SECONDS. ZERO FRAMES.</span>
+      <span className="archive-id">ARCHIVE 011 / CAMERA 06</span>
+      <button className="sound-control" onClick={() => setSound(value => !value)} aria-label={sound ? 'Mute sound' : 'Enable sound'} aria-pressed={sound}>{sound ? 'SOUND ON' : 'SOUND OFF'}</button>
+    </header>
+    <section className="stage" aria-label={scene === 'original' ? 'Original footage request' : 'Missing archive interval'}>
+      {scene !== 'original' && <SceneArtwork cut={current?.id ?? 'romance'} seconds={current ? seconds : 0} reducedMotion={reduced} />}
+      <div className="stage-vignette" aria-hidden="true" />
+      {scene === 'archive' && <div className="opening">
+        <p className="overline">EVENT 011 — 11 SECONDS MISSING</p>
+        <h1>ELEVEN SECONDS.<br/><em>ZERO FRAMES.</em></h1>
+        <p className="subtitle">Four histories of an event no camera ever saw.</p>
+        <div className="gap-timeline" aria-hidden="true"><span>02:17:08</span><i/><span>02:17:19</span></div>
+        <p className="availability">FOUR SYNTHETIC RECONSTRUCTIONS AVAILABLE</p>
+        <button className="primary-action" onClick={start}>ENTER THE GAP <span aria-hidden="true">↗</span></button>
+      </div>}
+      {current && <>
+        <div className="timecode" aria-label={`Archive timecode ${eventTime(seconds)}`}><span>CAM 06 / SYNTHETIC</span><strong>{eventTime(seconds)}</strong></div>
+        <div className="chapter-number" aria-hidden="true">0{indexOf(scene) + 1}<small> / 04</small></div>
+        <div className="scene-caption"><span>{current.name} / RECONSTRUCTION 0{indexOf(scene) + 1}</span><h2>{current.claim}</h2><p>{current.imprint}</p></div>
+        {scene === 'security' && <div className="security-label" aria-hidden="true">INFERENCE ONLY <span>↗</span></div>}
+        {scene === 'commerce' && <div className="commerce-seal" aria-hidden="true">M<small>011</small></div>}
+        <div className="progress-line" aria-label={`${Math.floor(seconds)} of 11 seconds`}><i style={{width:`${seconds / 11 * 100}%`}} /></div>
+      </>}
+      {scene === 'original' && <div className={`reveal reveal-${phase}`} aria-live="polite">
+        {phase === 'request' && <p className="request-line">REQUESTING SOURCE FRAMES <span aria-hidden="true">···</span></p>}
+        {(phase === 'zero' || phase === 'verdict') && <p className="zero-line">ORIGINAL FRAMES RECOVERED: <strong>0</strong></p>}
+        {phase === 'verdict' && <h2>FOUR HISTORIES.<br/><em>ZERO FRAMES.</em></h2>}
+      </div>}
+    </section>
+    <footer className="controls">
+      <div className="transport">
+        {current ? <><button onClick={() => move(-1)} aria-label="Previous reconstruction">←</button><button onClick={() => setPaused(value => !value)} aria-label={paused ? 'Play sequence' : 'Pause sequence'}>{paused ? '▶' : 'Ⅱ'}</button><button onClick={() => move(1)} aria-label="Next reconstruction">→</button></> : <span>{scene === 'original' ? 'END OF AVAILABLE RECORD' : '02:17:08—02:17:19'}</span>}
+      </div>
+      <nav className="chapters" aria-label="Reconstruction chapters">
+        {reconstructions.map((item, index) => <button key={item.id} className={scene === item.id ? 'selected' : ''} aria-current={scene === item.id ? 'step' : undefined} onClick={() => select(item.id)}><span>0{index + 1}</span>{item.name}</button>)}
+      </nav>
+      <div className="end-action">{current ? <button onClick={reveal}>SHOW ORIGINAL FOOTAGE <span aria-hidden="true">↗</span></button> : scene === 'original' && phase === 'verdict' ? <button onClick={replay}>REPLAY <span aria-hidden="true">↺</span></button> : null}</div>
+    </footer>
+  </main>;
 }

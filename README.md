@@ -1,30 +1,32 @@
-# THIS FOOTAGE DOES NOT EXIST
+# ELEVEN SECONDS. ZERO FRAMES.
 
-An interactive cinematic artwork. Eleven seconds were never recorded. Four institutions made the gap mean four incompatible things.
+*Four histories of an event no camera ever saw.* An interactive cinematic artwork and 60-second film for the Human After All Prize 2026.
 
-Source repository: [GitHub](https://github.com/delysion/this-footage-does-not-exist) (currently private).
-
-The [Vercel Preview](https://this-footage-does-not-exist-3zj0zok5c-delysions-projects.vercel.app) is built and verified but requires the connected Vercel account. The production project is paused pending the artist's review and publication approval.
+The [source repository](https://github.com/delysion/this-footage-does-not-exist) is private. The existing [Vercel production domain](https://this-footage-does-not-exist.vercel.app/) is paused pending the artist's explicit publication approval. The latest attempted Preview was blocked by that project-wide pause; the revised site has been built and tested locally.
 
 ## Run
 
-Requires Node.js 20+ and npm. No backend, account, tracking, or runtime AI service is used.
+Requires Node.js 20+ and npm. No backend, login, analytics, external font, paid API or runtime AI model is used.
 
 ```sh
 npm install
 npm run dev
 ```
 
-Production build: `npm run build`. The single-page experience is static and can be served from Vercel or any static host. All illustrations, styles and sound are local. System fonts provide fallbacks; there are no external runtime asset calls.
+Build with `npm run build`. The static output is `dist/`. All principal artwork is authored SVG/CSS in `src/ui/SceneArtwork.tsx` and `src/ui/style.css`. Sound is synthesized locally and opt-in on the website. The authored film uses Remotion; run `python tools_generate_sound.py` and `npm run render` to regenerate [the MP4](artifacts/eleven-seconds-zero-frames.mp4).
 
-## Film
+## Experience
 
-The authored Remotion composition is 60 seconds at 24 fps. [Download the rendered MP4](artifacts/this-footage-does-not-exist.mp4). Generate the original synthetic score with `python tools_generate_sound.py`, then render with `npm run render`. Rendering requires local Chrome and Remotion's FFmpeg binary. The distributed `public/tone-bed.wav` is the generated 60-second original score.
+The four cuts replay the same eleven seconds at 02:17:08–02:17:19. A red doorway, two figures, their reaching gesture and a damaged black shoe stay in the same spatial relationship. Changing chapters preserves the timecode. The images clear completely when the original is requested; the soundtrack stops, the retrieval fails and the screen remains empty before the final two lines.
 
-## Artistic structure
+Arrow keys change reconstructions, Space pauses or plays when the page has focus, and Escape returns to the opening. Visible controls provide the same actions. A reduced-motion setting stops the moving interval and shows the final finding immediately.
 
-The doorway, two indistinct bodies, fallen shoe and precise 02:17:08–02:17:19 interval recur in each interpretation. The romance version treats the figures as intimate; security assigns hostile intent; revolution places them before a crowd; commerce prices a private memory. The original request clears the image and leaves a trace of the doorway in darkness.
+## Review and evidence
 
-## Authorship review
+- [Before/after art audit](ART_AUDIT.md)
+- [Artist decision sheet](ARTIST_DECISIONS.md)
+- [Truthful draft AI Usage Notes](docs/AI-USAGE-NOTES.md)
+- [Competition description](docs/COMPETITION-DESCRIPTION.md)
+- [QA report](docs/QA-REPORT.md) and [browser screenshots](screenshots/)
 
-Codex generated the initial source, copy, vector composition, sound code and editorial sequence from the artist's brief. Before entry, the artist still needs to review and record specific choices about the final imagery, edit timing, sound, language and competition description. See [docs/ARTIST-DECISIONS.md](docs/ARTIST-DECISIONS.md) and [docs/AI-USAGE-NOTES.md](docs/AI-USAGE-NOTES.md). Do not use the notes as a claim that the artist has made choices not yet recorded.
+Codex implemented the code, vector scenes, sound and film under the artist's detailed creative directions. The artist has **not yet recorded final visual/audio review or approved public publication**. Those steps must not be represented as complete in a competition entry.
