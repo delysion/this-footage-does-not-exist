@@ -25,3 +25,8 @@
 - Competition description, draft AI Usage Notes, artist decision sheet, six-pillar adversarial review and evidence-based QA report are saved under `docs/`.
 - Created `THIS_FOOTAGE_DOES_NOT_EXIST_package.zip` with project source, local assets, MP4, screenshots and documentation; committed source as a local Git repository.
 - Remaining gates: artist review; Vercel login for Preview; separate authorization for public Production deployment. No entry submitted.
+
+## 2026-10-10 · Milestone 5 — GitHub source control
+- Created the private GitHub repository `delysion/this-footage-does-not-exist` using the account's stored Git credential. Set local branch to `main`, added `origin`, and pushed the full committed project.
+- Verified GitHub's repository metadata through the connected GitHub tool and confirmed that `refs/heads/main` on the remote equals local commit `f4285abe2deda397c5c8708eaea39acb9016d41f`.
+- The repository is private pending a deliberate decision to release the source publicly. Vercel authentication, deployment, public URL verification, and artist review remain pending.
