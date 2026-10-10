@@ -52,3 +52,9 @@
 ## 2026-10-10 · Milestone 9 — film and submission draft
 - Reworked Remotion to reuse the website's actual shared SVG action. Rendered `artifacts/eleven-seconds-zero-frames.mp4` (60.011s, 1600×900 H.264/AAC, 7.8MB) and inspected sampled frames. Opened the MP4 in a browser; playback advanced with no media error.
 - Updated README, competition description, AI Usage Notes, artist decision sheet, six-pillar adversarial review and QA report. The artist's latest title, subtitle, anchor and ending instructions are recorded as genuine human directions; final review and publication authorization remain pending.
+
+## 2026-10-10 · Milestone 10 — source and handoff
+- Decoded the rendered MP4 audio: normalized RMS was 0.008342 in a reconstruction and 0.0 in the final absence. Final local production build and full Chromium QA passed.
+- Built and inspected `ELEVEN_SECONDS_ZERO_FRAMES_package.zip`, containing source, local assets, film, screenshots and documentation without `node_modules` or build output.
+- Pushed the revised project to the existing private GitHub repository and verified the remote `main` ref matched the local commit. Vercel's automatic Production deployment remains Blocked while the project is paused; the public alias still returns 503.
+- Asked the artist for explicit authorization to reactivate the Vercel project and for specific final editorial input. Neither approval nor a completed artist review has been recorded yet.
