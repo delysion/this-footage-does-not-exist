@@ -6,3 +6,9 @@
 .vision.romance{animation:romanticCut 1.5s both}.vision.security{animation:forensicCut .7s steps(3,end) both}.vision.revolution{animation:monumentCut 1.8s both}.vision.commerce{animation:luxuryCut 2s both}.vision.original{animation:absenceCut 2.1s both}.paused .vision,.paused .figure,.paused .reticle,.paused .seal{animation-play-state:paused!important}.reveal p{font-size:11px}.reveal small{font-size:10px;letter-spacing:.06em}
 @keyframes romanticCut{from{transform:scale(1.07) translateX(-1%);filter:sepia(.3)}to{transform:scale(1) translateX(0)}}@keyframes forensicCut{0%,50%{transform:translateX(-.6%)}25%,75%{transform:translateX(.4%)}100%{transform:translateX(0)}}@keyframes monumentCut{from{transform:scale(1.08) translateY(1%);filter:contrast(1.4)}to{transform:scale(1) translateY(0)}}@keyframes luxuryCut{from{transform:scale(1.12);filter:brightness(1.3)}to{transform:scale(1);filter:brightness(1)}}@keyframes absenceCut{from{opacity:.1;filter:brightness(0)}to{opacity:1;filter:brightness(1)}}
 .original .masthead{visibility:hidden}.original .chapters,.original .control-left{display:none}.original .controls{display:flex;justify-content:flex-end;min-height:22px}.original .control-right{min-width:0;opacity:.46}.original .stage{border-color:transparent}.original .frame-edge{box-shadow:none}.original .reveal small{color:#bcb1a3}
+
+@media (max-width: 760px) {
+  .chapters button { font-size: 10px; letter-spacing: 0; padding: 11px 0; }
+  .chapters button i { display: none; }
+  .control-left > span, .pause, .request { font-size: 10px; }
+}

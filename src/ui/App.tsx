@@ -54,7 +54,7 @@ export default function App(){
   <div className="ambient" aria-hidden="true"/><header className="masthead"><span className="mark">ARCHIVE / 04</span><span>FIELD NOTE 11—A</span><button className="sound" onClick={()=>setSound(!sound)} aria-label={sound?'Mute sound':'Enable sound'}>{sound?'SOUND ON':'SOUND OFF'}</button></header>
   <section className="stage" aria-live="polite">
    <Vision scene={scene}/><div className="frame-edge"/>
-   {scene==='archive'&&<div className="opening"><p className="eyebrow">RESTRICTED ARCHIVE · CAMERA 06</p><h1>THIS FOOTAGE<br/><em>DOES NOT EXIST</em></h1><div className="gap"><span>02:17:08</span><i/><span>02:17:19</span><b>11 SECONDS MISSING</b></div><p className="premise">Four reconstructions are available.</p><button className="enter" onClick={start}>ENTER THE GAP <span>↗</span></button></div>}
+   {scene==='archive'&&<div className="opening"><p className="eyebrow">EVENT 011 — 11 SECONDS MISSING</p><h1>THIS FOOTAGE<br/><em>DOES NOT EXIST</em></h1><div className="gap"><span>02:17:08</span><i/><span>02:17:19</span><b>NO RECORDED FRAMES</b></div><p className="premise">Four reconstructions are available.</p><button className="enter" onClick={start}>ENTER THE GAP <span>↗</span></button></div>}
    {current&&<div className="caption"><span>{current.stamp}</span><h2>{current.line}</h2></div>}
    {scene==='security'&&<div className="reticle" aria-hidden="true"><i/><span>SUBJECT 02 · 98.4%</span></div>}
    {scene==='commerce'&&<div className="seal">M<br/><small>MEMORY / No. 011</small></div>}
@@ -62,7 +62,7 @@ export default function App(){
    {current&&<div className="index" aria-hidden="true">0{indexOf(scene)+1}<span> / 04</span></div>}
   </section>
   <footer className="controls">
-   <div className="control-left">{scene==='archive'?<span>11 FRAMES LOST TO THE RECORD</span>:scene==='original'?<span>END OF AVAILABLE RECORD</span>:<><button onClick={()=>move(-1)} aria-label="Previous reconstruction">←</button><span>PREVIOUS / NEXT</span><button onClick={()=>move(1)} aria-label="Next reconstruction">→</button></>}</div>
+   <div className="control-left">{scene==='archive'?<span>11 SECONDS ABSENT FROM THE RECORD</span>:scene==='original'?<span>END OF AVAILABLE RECORD</span>:<><button onClick={()=>move(-1)} aria-label="Previous reconstruction">←</button><span>PREVIOUS / NEXT</span><button onClick={()=>move(1)} aria-label="Next reconstruction">→</button></>}</div>
    <nav className="chapters" aria-label="Reconstructions">{cuts.map((c,i)=><button key={c.id} className={scene===c.id?'active':''} aria-label={`View ${c.title.toLowerCase()} reconstruction`} aria-current={scene===c.id?'step':undefined} onClick={()=>{setScene(c.id);setSeen(v=>v.includes(c.id)?v:[...v,c.id])}}><i>{String(i+1).padStart(2,'0')}</i><span>{c.title}</span></button>)}</nav>
    <div className="control-right">{scene==='archive'?<span>02:17:08 — 02:17:19</span>:scene==='original'?<button className="request" onClick={replay}>REPLAY ↺</button>:<><button className="pause" onClick={()=>setPaused(!paused)}>{paused?'PLAY':'PAUSE'} {paused?'▶':'Ⅱ'}</button><button className="request" onClick={()=>setScene('original')}>SHOW ORIGINAL FOOTAGE <span>↗</span></button></>}</div>
   </footer>
